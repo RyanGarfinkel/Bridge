@@ -54,7 +54,7 @@ export default function Home() {
     </p>
     <Button variant="default" asChild>
       <a href="/auth/login" style={{ fontSize: "1.25rem", padding: "10px 20px" }}>
-        Log In
+        Log In/sign up
       </a>
     </Button>
   </div>

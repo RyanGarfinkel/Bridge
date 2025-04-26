@@ -6,6 +6,7 @@ import { useUser } from '@auth0/nextjs-auth0';
 import React, { useState, useEffect } from 'react';
 
 interface DataContextProps {
+    isLoading: boolean;
     user: IUser | undefined;
     courses: ICourse[];
 }
@@ -16,6 +17,7 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
     const { user: auth0User } = useUser();
 
+    const [isLoading, setIsLoading] = useState(false);
     const [user, setUser] = useState<IUser | undefined>(undefined);
     const [courses, setCourses] = useState<ICourse[]>([]);
 
@@ -25,11 +27,13 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         {
             setUser(undefined);
             setCourses([]);
+            setIsLoading(false);
             return;
         }
        
         const callback = async () => {
 
+            setIsLoading(true);
             const res = await fetch('/api/user', {
                 method: 'POST',
                 headers: {
@@ -37,8 +41,8 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
                 },
                 body: JSON.stringify({
                     auth0Id: auth0User?.sub,
-                    firstname: auth0User?.given_name || 'Ryan',
-                    lastname: auth0User?.family_name || 'G',
+                    firstname: auth0User?.given_name,
+                    lastname: auth0User?.family_name,
                 }),
             });
     
@@ -55,7 +59,7 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
                 setCourses([]);
                 throw new Error('Failed to fetch user and courses');
             }
-
+            setIsLoading(false);
         }
 
         callback();
@@ -63,7 +67,7 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     }, [auth0User]);
 
     return (
-        <DataContext.Provider value={{ user, courses }}>
+        <DataContext.Provider value={{ user, courses, isLoading }}>
             {children}
         </DataContext.Provider>
     )

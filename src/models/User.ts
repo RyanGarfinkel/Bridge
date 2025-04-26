@@ -1,9 +1,9 @@
-import mongoose, { Document } from "mongoose";
+import mongoose, { Document } from 'mongoose';
 
 interface IUser extends Document {
     auth0Id: string;
-    firstName?: string;
-    lastName?: string;
+    firstname?: string;
+    lastname?: string;
     hasCompletedSurvey: boolean;
 }
 
@@ -13,11 +13,11 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    firstName: {
+    firstname: {
         type: String,
         required: false,
     },
-    lastName: {
+    lastname: {
         type: String,
         required: false,
     },
@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
     },
 });
 
-const User = mongoose.models.User || mongoose.model<IUser>("User", userSchema);
+const User = mongoose.models.User || mongoose.model<IUser>('User', userSchema);
 
 export default User;
 export type { IUser };

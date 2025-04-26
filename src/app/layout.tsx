@@ -1,20 +1,20 @@
 'use client';
 
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
-import { useUser } from "@auth0/nextjs-auth0";
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { AppSidebar } from '@/components/app-sidebar'
+import { useUser } from '@auth0/nextjs-auth0';
+import { DataProvider } from '@/context/DataProvider';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export default function RootLayout({
@@ -27,14 +27,14 @@ export default function RootLayout({
   return (
 
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <SidebarProvider>
-          { user && <AppSidebar />}
-          { user && <SidebarTrigger />}
-          {children}
-        </SidebarProvider>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <DataProvider>
+          <SidebarProvider>
+            { user && <AppSidebar />}
+            { user && <SidebarTrigger />}
+            {children}
+          </SidebarProvider>
+        </DataProvider>
       </body>
     </html>
   );

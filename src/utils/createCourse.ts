@@ -1,5 +1,4 @@
-import Course from '@/models/Course';
-import User from '@/models/User';
+import Course, { ILesson } from '@/models/Course';
 import { GoogleGenAI, Type } from '@google/genai';
 
 const ai = new GoogleGenAI({
@@ -7,11 +6,6 @@ const ai = new GoogleGenAI({
 });
 
 const createCourse = async (prompt: string, auth0Id: string) => {
-
-    const user = await User.findOne({ auth0Id });
-    if (!user) {
-        throw new Error('User not found.');
-    }
 
     const response = await ai.models.generateContent({
         model: 'gemini-2.0-flash',
@@ -45,22 +39,19 @@ const createCourse = async (prompt: string, auth0Id: string) => {
 
     const courseObj = JSON.parse(response.text || '');
 
-    // Validate lessons to ensure content is present
-    if (!courseObj.lessons || !Array.isArray(courseObj.lessons)) {
+    if (!courseObj.lessons || !Array.isArray(courseObj.lessons))
         throw new Error('Invalid lessons format.');
-    }
 
-    courseObj.lessons.forEach((lesson: { title: string; description: string; content: string }, index: number) => {
-        if (!lesson.content) {
+    courseObj.lessons.forEach((lesson: ILesson, index: number) => {
+        if (!lesson.content)
             throw new Error(`Lesson ${index} is missing content.`);
-        }
     });
 
     const course = await Course.create({
         title: courseObj.title,
         isCompleted: false,
-        user: user._id,
-        lessons: courseObj.lessons.map((lesson: { title: string; description: string; content: string }) => ({
+        auth0Id: auth0Id,
+        lessons: courseObj.lessons.map((lesson: ILesson) => ({
             title: lesson.title,
             isCompleted: false,
             description: lesson.description,

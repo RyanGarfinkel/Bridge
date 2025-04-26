@@ -1,37 +1,37 @@
 'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function Survey() {
   const [formData, setFormData] = useState({
-    name: "",
-    birthDate: "",
-    location: "",
-    pronouns: "",
-    pets: "",
-    university: "",
-    studyPlan: "",
-    explanationPreference: "",
+    name: '',
+    birthDate: '',
+    location: '',
+    pronouns: '',
+    pets: '',
+    university: '',
+    studyPlan: '',
+    explanationPreference: '',
     studyTools: [] as string[],
-    roadblockSolution: "",
-    coachStyle: "",
-    studyPartner: "",
-    studyVoice: "",
-    unwind: "",
-    hobbies: "",
-    holiday: "",
-    comfort: "",
-    studyBuddy: "",
-    favoriteShows: "",
-    favoriteGame: "",
-    dinnerGuest: "",
-    travelDestination: "",
-    instantSkill: "",
+    roadblockSolution: '',
+    coachStyle: '',
+    studyPartner: '',
+    studyVoice: '',
+    unwind: '',
+    hobbies: '',
+    holiday: '',
+    comfort: '',
+    studyBuddy: '',
+    favoriteShows: '',
+    favoriteGame: '',
+    dinnerGuest: '',
+    travelDestination: '',
+    instantSkill: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
-    if (type === "checkbox") {
+    if (type === 'checkbox') {
       setFormData((prev) => ({
         ...prev,
         [name]: checked
@@ -72,8 +72,8 @@ interface FormData {
 
 const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Survey Data:", formData);
-    alert("Survey submitted! Thank you!");
+    console.log('Survey Data:', formData);
+    alert('Survey submitted! Thank you!');
 };
 
   return (
@@ -82,15 +82,15 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     <form
       onSubmit={handleSubmit}
       style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "20px",
-        maxWidth: "600px",
-        margin: "0 auto",
-        fontFamily: "sans-serif",
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '20px',
+        maxWidth: '600px',
+        margin: '0 auto',
+        fontFamily: 'sans-serif',
       }}
     >
-    <h1 style={{ marginTop: "40px", fontSize: "2.5rem", textAlign: "center" }}>Survey</h1>
+    <h1 style={{ marginTop: '40px', fontSize: '2.5rem', textAlign: 'center' }}>Survey</h1>
 
       {/* Questions */}
       <label>
@@ -101,11 +101,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.name}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -118,11 +118,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.birthDate}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -135,11 +135,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.location}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -152,11 +152,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.pronouns}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -169,11 +169,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.pets}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -186,11 +186,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.university}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -203,11 +203,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.studyPlan}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -219,11 +219,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.explanationPreference}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         >
           <option value="">Select</option>
@@ -235,21 +235,21 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     <fieldset>
       <legend>Which of the following study tools do you feel you benefit most from? (Check all that apply)</legend>
       {[
-        "Flashcards",
-        "Practice quizzes/tests",
-        "Step-by-step walkthroughs",
-        "Summarized notes/outlines",
-        "Real-world examples and case studies",
-        "Mnemonics or memory tricks",
-        "Checklists and progress trackers",
-        "Other (please specify)",
+        'Flashcards',
+        'Practice quizzes/tests',
+        'Step-by-step walkthroughs',
+        'Summarized notes/outlines',
+        'Real-world examples and case studies',
+        'Mnemonics or memory tricks',
+        'Checklists and progress trackers',
+        'Other (please specify)',
       ].map((tool) => (
         <label
         key={tool}
         style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "8px", // Adds spacing between checkbox and text
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px', // Adds spacing between checkbox and text
         }}
         >
         <input
@@ -267,12 +267,12 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     <fieldset>
       <legend>What do you usually do when you face a roadblock while studying?</legend>
       {[
-        "Take a break and come back later",
-        "Ask a friend or teacher for help",
-        "Look up solutions online",
-        "Try to figure it out on my own",
+        'Take a break and come back later',
+        'Ask a friend or teacher for help',
+        'Look up solutions online',
+        'Try to figure it out on my own',
       ].map((solution) => (
-        <label key={solution} style={{ display: "block", marginBottom: "8px" }}>
+        <label key={solution} style={{ display: 'block', marginBottom: '8px' }}>
         <input
           type="radio"
           name="roadblockSolution"
@@ -287,8 +287,8 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 
     <fieldset>
       <legend>If you had a personal coach while you studied, would you want them to sound like:</legend>
-      {["A wise mentor", "A fun friend", "A competitive trainer"].map((style) => (
-        <label key={style} style={{ display: "block", marginBottom: "8px" }}>
+      {['A wise mentor', 'A fun friend', 'A competitive trainer'].map((style) => (
+        <label key={style} style={{ display: 'block', marginBottom: '8px' }}>
         <input
           type="radio"
           name="coachStyle"
@@ -303,14 +303,14 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 
     <fieldset>
       <legend>Would you prefer a study partner to act more:</legend>
-      {["patient", "motivating", "creative"].map((trait) => (
+      {['patient', 'motivating', 'creative'].map((trait) => (
         <label
         key={trait}
         style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "8px", // Adds spacing between radio button and text
-          marginBottom: "8px", // Adds spacing between options
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px', // Adds spacing between radio button and text
+          marginBottom: '8px', // Adds spacing between options
         }}
         >
         <input
@@ -327,14 +327,14 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 
     <fieldset>
       <legend>If your study material had a "voice," would you want it to sound:</legend>
-      {["Calm and reassuring", "Excited and energetic", "Mysterious and intriguing"].map((voice) => (
+      {['Calm and reassuring', 'Excited and energetic', 'Mysterious and intriguing'].map((voice) => (
         <label
         key={voice}
         style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "8px", // Adds spacing between radio button and text
-          marginBottom: "8px", // Adds spacing between options
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px', // Adds spacing between radio button and text
+          marginBottom: '8px', // Adds spacing between options
         }}
         >
         <input
@@ -357,11 +357,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.unwind}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -374,11 +374,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.hobbies}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -391,11 +391,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.holiday}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -408,11 +408,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.comfort}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -425,11 +425,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.studyBuddy}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -442,11 +442,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.favoriteShows}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -459,11 +459,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.favoriteGame}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -476,11 +476,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.dinnerGuest}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -493,11 +493,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.travelDestination}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -510,11 +510,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
           value={formData.instantSkill}
           onChange={handleChange}
           style={{
-            outline: "2px solid #ccc", // Adds a visible outline
-            padding: "8px", // Adds padding for better spacing
-            borderRadius: "4px", // Optional: Rounds the corners
-            width: "100%", // Optional: Makes the input take full width
-            boxSizing: "border-box", // Ensures padding doesn't affect width
+            outline: '2px solid #ccc', // Adds a visible outline
+            padding: '8px', // Adds padding for better spacing
+            borderRadius: '4px', // Optional: Rounds the corners
+            width: '100%', // Optional: Makes the input take full width
+            boxSizing: 'border-box', // Ensures padding doesn't affect width
           }}
         />
       </label>
@@ -522,15 +522,15 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     <button
       type="submit"
       style={{
-        marginTop: "20px", // Adds spacing above the button
-        marginBottom: "40px", // Adds spacing below the button
-        padding: "10px 20px", // Adds padding for better click area
-        backgroundColor: "#000", // Sets a black background color
-        color: "#fff", // Sets the text color to white
-        border: "none", // Removes the default border
-        borderRadius: "4px", // Rounds the corners
-        cursor: "pointer", // Changes the cursor to a pointer on hover
-        fontSize: "16px", // Sets a readable font size
+        marginTop: '20px', // Adds spacing above the button
+        marginBottom: '40px', // Adds spacing below the button
+        padding: '10px 20px', // Adds padding for better click area
+        backgroundColor: '#000', // Sets a black background color
+        color: '#fff', // Sets the text color to white
+        border: 'none', // Removes the default border
+        borderRadius: '4px', // Rounds the corners
+        cursor: 'pointer', // Changes the cursor to a pointer on hover
+        fontSize: '16px', // Sets a readable font size
       }}
     >
       Submit Survey

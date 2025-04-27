@@ -25,10 +25,32 @@ const createCourse = async (prompt: string, auth0Id: string) => {
                                 description: { type: Type.STRING },
                                 content: {
                                     type: Type.STRING,
-                                    description: 'The content of the lesson, which is text. Make sure it is roughly 100-200 words.',
+                                    description: 'The content of the lesson, which is text. Make sure it is roughly 800-1000 words.',
+                                },
+                                questions: {
+                                    type: Type.ARRAY,
+                                    items: {
+                                        type: Type.OBJECT,
+                                        properties: {
+                                            question: { type: Type.STRING },
+                                            answers: {
+                                                type: Type.ARRAY,
+                                                items: {
+                                                    type: Type.OBJECT,
+                                                    properties: {
+                                                        text: { type: Type.STRING },
+                                                        isCorrect: { type: Type.BOOLEAN },
+                                                    },
+                                                    required: ['text', 'isCorrect'],
+                                                },
+                                                description: 'An array of 4 answers, one of which is correct.',
+                                            },
+                                        },
+                                        required: ['question', 'answers'],
+                                    },
                                 },
                             },
-                            required: ['title', 'description', 'content'],
+                            required: ['title', 'description', 'content', 'questions'],
                         },
                     },
                 },

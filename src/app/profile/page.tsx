@@ -1,27 +1,23 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
+import { useData } from "@/context/DataProvider";
 import { useUser } from "@auth0/nextjs-auth0";
 import Link from "next/link";
 
 export default function UserProfile() {
-  const { user, isLoading } = useUser();
+  const { user, isLoading } = useData();
+  const { user: auth0User } = useUser();
 
   if (isLoading)
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          fontFamily: "sans-serif",
-          textAlign: "center",
-        }}
-      >
-        <p>Loading...</p>
+      <div className='flex justify-center items-center h-screen w-screen font-sans text-center'>
+        <h1 style={{ fontSize: '3rem' }}>Loading...</h1>
       </div>
     );
+
+  if (user)
+    console.log(user);
 
   if (user)
     return (
@@ -40,11 +36,14 @@ export default function UserProfile() {
             padding: 0, // Ensure no padding
             boxSizing: "border-box", // Consistent box model
         }}
-      >
+            >
         {/* Profile Picture */}
         <img
-          src={user.picture}
-          alt={`${user.name}'s profile`}
+          src={auth0User?.picture || "/default-profile.png"}
+          alt={`${user.firstname}'s profile`}
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "/default-profile.png";
+          }}
           style={{
             borderRadius: "50%",
             width: "150px",
@@ -55,12 +54,14 @@ export default function UserProfile() {
 
         {/* User Title */}
         <h1 style={{ fontSize: "2rem", fontWeight: "bold" }}>
-          Hello, {user.name}.
+          Hello, {user.firstname}.
         </h1>
 
         {/* Survey Button */}
         <Button variant="outline" asChild>
-          <Link href="/survey">Complete Survey</Link>
+          <Link href="/survey">
+            {user.hasCompletedSurvey ? "Redo Survey" : "Complete Survey"}
+          </Link>
         </Button>
 
       </div>

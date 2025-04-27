@@ -1,10 +1,35 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
+import { useData } from "@/context/DataProvider";
+import { ICourse } from "@/models/Course";
+import { set } from "mongoose";
 import { useRouter } from "next/navigation"; // Correct import for client components
+import { useEffect, useState } from "react";
 
 export default function CourseDescription() {
   const router = useRouter();
+  const {courses} = useData();
+  const [course, setCourse] = useState<ICourse>();
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const unit = queryParams.get("unit");
+    
+    if(!unit)
+      console.log("No unit selected");
+    else
+    {
+      console.log('unit passed in', unit)
+
+      const course = courses.find((course) => course.title.toLowerCase().replaceAll(" ", "-") === unit);
+
+      if(!course)
+        console.log("No course found");
+      else
+        setCourse(course as ICourse);
+    }
+  }, [courses, router]);
 
   return (
     <div
@@ -36,19 +61,19 @@ export default function CourseDescription() {
 
       {/* Course Title */}
       <h1 style={{ fontSize: "3rem", fontWeight: "bold" }}>
-        UNIT TITLE
+        {course ? course.title.toUpperCase() : "Loading..."}
       </h1>
 
       {/* Curriculum Section */}
       <div style={{ textAlign: "left", width: "100%" }}>
         <h2 style={{ fontSize: "2rem", marginBottom: "10px" }}>Curriculum:</h2>
-        <ul style={{ fontSize: "1.2rem", lineHeight: "1.8" }}>
-          <li>LESSON ONE</li>
-          <li>LESSON TWO</li>
-          <li>LESSON THREE</li>
-          <li>LESSON FOUR</li>
-          <li>LESSON FIVE</li>
-        </ul>
+      {course && course.lessons && course.lessons.length > 0 ? (
+        course.lessons.map((lesson, index) => (
+          <li key={index}>{lesson.title}</li>
+        ))
+      ) : (
+        <li>No lessons available</li>
+      )}
       </div>
 
       {/* Start Lesson Buttons */}

@@ -1,100 +1,99 @@
-import Course, { ILesson, IQuestion, IAnswer } from '@/models/Course';
-import { GoogleGenAI, Type } from '@google/genai';
+import Course, { ILesson, IQuestion } from '@/models/Course';
+import { GoogleGenAI } from '@google/genai';
 
 const ai = new GoogleGenAI({
-    apiKey: process.env.GOOGLE_GENAI_API_KEY
+    apiKey: process.env.GOOGLE_GENAI_API_KEY,
 });
 
-const createLesson = async (title: string, surveyResponses: string) => {
-
-    const prompt = 'Create a lesson description and content for the following title: ' +  '. The content should be detailed and should teach the student about the topic. 500-600 words for the content. Here are survey responses you should incorporate into the content to make it more interesting based on their personality, study habits, and interests: ' + surveyResponses;
+// Function to create a lesson
+const createLesson = async (title: string, surveyResponses: string): Promise<ILesson> => {
+    const prompt = `Write a detailed and engaging lesson on the topic "${title}". Use the following survey responses to make the lesson more personalized: ${surveyResponses}. The lesson should be clear, easy to understand, and around 500-600 words. Do not include any titles or headings—just provide the lesson content as plain text.`;
 
     const response = await ai.models.generateContent({
         model: 'gemini-2.0-flash',
         contents: prompt,
         config: {
-            responseMimeType: 'application/json',
-            responseSchema: {
-                type: Type.STRING,
-                description: 'Provide as plaintext with no extra symbols or formatting. The content should be detailed and should teach the student about the topic, prioritizing readability and simplicity. 500-600 words for the content.',
-            },
-        }
+            responseMimeType: 'text/plain',
+        },
     });
 
-    const content = response.text || '';
+    const content = (response.text || '').replace(/\\n/g, ' ').trim(); // Clean up the content
 
     const questions = await createQuestions(content);
 
-    const lesson: ILesson = {
-        title: title.split('-')[0],
+    return {
+        title: title.split('-')[0], // Use the first part of the title
         isCompleted: false,
         content: content,
-        questions: questions.map((question: IQuestion) => ({
-            question: question.question,
-            answers: question.answers.map((answer: IAnswer) => ({
-                text: answer.text,
-                isCorrect: answer.isCorrect,
-            })),
-        })),
+        questions,
     };
+};
 
-    return lesson;
-}
+// Function to create questions
+const createQuestions = async (content: string): Promise<IQuestion[]> => {
+    const prompt = `Based on the following lesson content: "${content}", generate 4 multiple-choice questions. Each question should have 4 possible answers, with one correct answer. Provide the questions and answers as plain text, formatted like this:
+    
+    Question 1: [Your question here]
+    a) [Answer 1]
+    b) [Answer 2]
+    c) [Answer 3]
+    d) [Answer 4]
+    Correct Answer: [Correct answer letter]`;
 
-const createQuestions = async (content: string) => {
-
-    const prompt = 'Create a question for the following content: ' + content + '. The questions should be related to the content and should have 4 possible answers, one of which is correct.';
-    console.log('bout to make questions');
+    console.log('Generating questions...');
     const response = await ai.models.generateContent({
         model: 'gemini-2.0-flash',
         contents: prompt,
         config: {
-            responseMimeType: 'application/json',
-            responseSchema: {
-                type: Type.ARRAY,
-                items: {
-                    type: Type.OBJECT,
-                    properties: {
-                        question: { type: Type.STRING },
-                        answers: {
-                            type: Type.ARRAY,
-                            items: {
-                                type: Type.OBJECT,
-                                properties: {
-                                    text: { type: Type.STRING },
-                                    isCorrect: { type: Type.BOOLEAN },
-                                },
-                                required: ['text', 'isCorrect'],
-                            },
-                            description: 'An array of 4 answers, one of which is correct.',
-                        },
-                    },
-                    required: ['question', 'answers'],
-                },
-                minItems: '4',
-            },
-        }
+            responseMimeType: 'text/plain',
+        },
     });
 
-    const questions = JSON.parse(response.text || '');
+    const questionsText = (response.text || '').replace(/\\n/g, ' ').trim(); // Clean up the response
+    console.log('Finished generating questions.');
 
-    console.log('finished making questions');
+    return parseQuestions(questionsText);
+};
 
-    return questions.map((question: IQuestion) => ({
-        question: question.question,
-        answers: question.answers.map((answer: IAnswer) => ({
-            text: answer.text,
-            isCorrect: answer.isCorrect,
-        })),
-    }));
-}
+// Helper function to parse plain text questions into structured format
+const parseQuestions = (questionsText: string): IQuestion[] => {
+    const questions: IQuestion[] = [];
+    const questionBlocks = questionsText.split('Question ').slice(1); // Split by "Question" and ignore the first empty part
 
+    for (const block of questionBlocks) {
+        const lines = block.split('\n').map((line) => line.trim());
+        const questionLine = lines[0];
+        const answers = lines.slice(1, 5).map((line) => ({
+            text: line.slice(3).trim(), // Remove "a) ", "b) ", etc.
+            isCorrect: false, // Default to false; we'll set the correct answer below
+        }));
+        const correctAnswerLine = lines[5];
+        const correctAnswerLetter = correctAnswerLine.split(':')[1].trim();
+
+        // Mark the correct answer
+        const correctIndex = correctAnswerLetter.charCodeAt(0) - 'a'.charCodeAt(0);
+        if (answers[correctIndex]) {
+            answers[correctIndex].isCorrect = true;
+        }
+
+        questions.push({
+            question: questionLine,
+            answers,
+        });
+    }
+
+    return questions;
+};
+
+// Function to create a course
 const createCourse = async (title: string, lessons: string[], surveyResponses: string, auth0Id: string) => {
+    console.log('Starting course creation...');
+    const lessonsGenerated: ILesson[] = [];
 
-    console.log('bout to make course');
-    const lessonsGenerated = [];
-    for (const lessonTitle of lessons)
-        lessonsGenerated.push(await createLesson(lessonTitle, surveyResponses));
+    for (const lessonTitle of lessons) {
+        const lesson = await createLesson(lessonTitle, surveyResponses);
+        lessonsGenerated.push(lesson);
+    }
 
     const course = await Course.create({
         title: title,
@@ -103,97 +102,8 @@ const createCourse = async (title: string, lessons: string[], surveyResponses: s
         lessons: lessonsGenerated,
     });
 
+    console.log('Course created successfully:', course.title);
     return course;
-
-
-    // const response = await ai.models.generateContent({
-    //     model: 'gemini-2.0-flash',
-    //     contents: prompt,
-    //     config: {
-    //         responseMimeType: 'application/json',
-    //         responseSchema: {
-    //             type: Type.OBJECT,
-    //             properties: {
-    //                 title: { type: Type.STRING },
-    //                 lessons: {
-    //                     type: Type.ARRAY,
-    //                     items: {
-    //                         type: Type.OBJECT,
-    //                         properties: {
-    //                             title: { type: Type.STRING },
-    //                             description: { type: Type.STRING },
-    //                             content: {
-    //                                 type: Type.STRING,
-    //                                 description: 'Provide detailed content of the lesson. It should teach the student about the topic. 500-600 words.',
-    //                             },
-
-    //                             questions: {
-    //                                 type: Type.ARRAY,
-    //                                 items: {
-    //                                     type: Type.OBJECT,
-    //                                     properties: {
-    //                                         question: { type: Type.STRING },
-    //                                         answers: {
-    //                                             type: Type.ARRAY,
-    //                                             items: {
-    //                                                 type: Type.OBJECT,
-    //                                                 properties: {
-    //                                                     text: { type: Type.STRING },
-    //                                                     isCorrect: { type: Type.BOOLEAN },
-    //                                                 },
-    //                                                 required: ['text', 'isCorrect'],
-    //                                             },
-    //                                             description: 'An array of 4 answers, one of which is correct.',
-    //                                         },
-    //                                     },
-    //                                     required: ['question', 'answers'],
-    //                                 },
-    //                                 minItems: '4',
-    //                             },
-    //                         },
-    //                         required: ['title', 'description', 'content', 'questions'],
-    //                     },
-    //                 },
-    //             },
-    //             required: ['title', 'lessons'],
-    //         },
-    //     }
-    // });
-
-    // const courseObj = JSON.parse(response.text || '');
-
-    // if (!courseObj.lessons || !Array.isArray(courseObj.lessons))
-    //     throw new Error('Invalid lessons format.');
-
-    // courseObj.lessons.forEach((lesson: ILesson, index: number) => {
-    //     if (!lesson.content)
-    //         throw new Error(`Lesson ${index} is missing content.`);
-    // });
-
-    // console.log('Course object:', courseObj.lessons[0]);
-
-    // const course = await Course.create({
-    //     title: courseObj.title,
-    //     isCompleted: false,
-    //     auth0Id: auth0Id,
-    //     lessons: courseObj.lessons.map((lesson: ILesson) => ({
-    //         title: lesson.title,
-    //         isCompleted: false,
-    //         description: lesson.description,
-    //         content: lesson.content,
-    //         questions: lesson.questions.map((question: IQuestion) => ({
-    //             question: question.question,
-    //             answers: question.answers.map((answer: IAnswer) => ({
-    //                 text: answer.text,
-    //                 isCorrect: answer.isCorrect,
-    //             })),
-    //         })),
-    //     })),
-    // });
-
-    // console.log('Created course:', course);
-
-    // return course;
 };
 
 export default createCourse;

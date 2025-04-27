@@ -1,13 +1,13 @@
 const lessonContent = `
     The following is a description of a unit for a college readiness training module.
-    Each unit is composed of a set of lessons that focus on a specific sub area of the overal unit topic, and a set of questions that quiz student on the material.
-    The lessons, questions, and answers to the questions, are all customized to meet the personality, interests, and learning style of the student. 
+    Each unit is composed of a set of lessons that focus on a specific sub area of the overal unit topic, and four questions that quiz student on the material.
+    The lessons, four questions, and answers to the four questions, are all customized to meet the personality, interests, and learning style of the student. 
     Make sure that when you generate the lesson contents that it is clear it is being custom tailored to their preferences.
-    The content, questions, and answers should be based on the student's personality and their interests so as to be engaging and fun.
+    The content, four questions, and answers should be based on the student's personality and their interests so as to be engaging and fun.
     Generate a set of lessons from the following unit description. 
     Each lesson should be approximately 800 to 1000 words of content on the lesson focus, and 4 multiple choice lessons on the content. 
-    The questions should be multiple choice, with one correct answer and three incorrect answers. 
-    The questions should be relevant to the content of the lesson, and should be designed to test the students understanding of the material. 
+    The four questions should be multiple choice, with one correct answer and three incorrect answers. 
+    The four questions should be relevant to the content of the lesson, and should be designed to test the students understanding of the material. 
 `
 
 const academicLife = `

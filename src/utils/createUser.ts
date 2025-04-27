@@ -1,6 +1,6 @@
-import prompts from "./prompts";
-import createCourse from "./createCourse";
-import User from "@/models/User";
+import prompts from './prompts';
+import createCourse from './createCourse';
+import User from '@/models/User';
 
 const createUser = async (auth0Id: string, firstName: string, lastName: string) => {
 

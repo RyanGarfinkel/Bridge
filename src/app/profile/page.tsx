@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { useData } from '@/context/DataProvider';
 import { useUser } from '@auth0/nextjs-auth0';
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function UserProfile() {
   const { user, isLoading } = useData(); // Assuming `surveyCompleted` is part of your context

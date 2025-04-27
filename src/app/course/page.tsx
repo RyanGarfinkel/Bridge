@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { useData } from '@/context/DataProvider';
 import { ICourse, ILesson } from '@/models/Course';
 import ReactMarkdown from 'react-markdown';
@@ -16,8 +15,6 @@ const toMarkdown = (text: string) => {
 
 export default function StudyAndQuizPage() {
   const [currentPart, setCurrentPart] = useState(1); // State to track the current part (1 or 2)
-  const [urlParam, setUrlParam] = useState<string | null>(null); // State to store the URL parameter
-  const searchParams = useSearchParams(); // Hook to access URL parameters
   const {courses, completeLesson} = useData();
 
     const [course, setCourse] = useState<ICourse>();
@@ -38,20 +35,8 @@ export default function StudyAndQuizPage() {
     setLesson(courseObj?.lessons.find((lesson) => lesson.title.trim() === lessonName) as ILesson);
   }, []);
 
-  useEffect(() => {
-    // Get the "unit" parameter from the URL
-    const lesson = searchParams ? searchParams.get('lesson') : null;
-    setUrlParam(lesson ? lesson.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase()) : null); // Store the formatted parameter in state
-
-  }, [searchParams]);
-
   const handleNext = () => {
     setCurrentPart(2); // Move to the second part
-  };
-
-  const handleAnswer = (answer: string) => {
-    alert(`You selected: ${answer}`);
-    // Add logic to handle the selected answer
   };
 
   return (
@@ -110,7 +95,7 @@ export default function StudyAndQuizPage() {
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
-                  p: ({ node, ...props }) => <p style={{ marginBottom: '20px' }} {...props} />,
+                  p: ({ ...props }) => <p style={{ marginBottom: '20px' }} {...props} />,
                 }}
               >
                 {lesson?.content ? toMarkdown(lesson.content) : ''}

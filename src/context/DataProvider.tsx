@@ -12,6 +12,8 @@ interface DataContextProps {
     isFetchingCourses: boolean;
     updateSurvey: (survey: object) => void;
     completeLesson: (course: ICourse, lesson: ILesson) => void;
+    currentCourse: ICourse | undefined;
+    updateCurrentCourse: (course: ICourse) => void;
 }
 
 const DataContext = React.createContext<DataContextProps | undefined>(undefined);
@@ -147,8 +149,13 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         }
     };
 
+    const [currentCourse, setCurrentCourse] = useState<ICourse | undefined>(undefined);
+    const updateCurrentCourse = (course: ICourse) => {
+        setCurrentCourse(course);
+    };
+
     return (
-        <DataContext.Provider value={{ user, courses, isLoading, updateSurvey, isFetchingCourses, completeLesson}}>
+        <DataContext.Provider value={{ user, courses, isLoading, updateSurvey, isFetchingCourses, completeLesson, currentCourse, updateCurrentCourse }}>
             {children}
         </DataContext.Provider>
     )

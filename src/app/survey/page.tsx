@@ -1,10 +1,13 @@
 'use client';
 
 import { useData } from '@/context/DataProvider';
+import { useRouter } from 'next/navigation';
 
 export default function Survey() {
 
   const { updateSurvey } = useData();
+
+  const router = useRouter();
   
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       
@@ -12,7 +15,9 @@ export default function Survey() {
 
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
+    console.log('about to submit survey:');
     updateSurvey(data);
+    router.push('/dashboard');
   };
 
   return (

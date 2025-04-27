@@ -1,14 +1,13 @@
 import Course, { ILesson, IQuestion, IAnswer } from '@/models/Course';
 import { GoogleGenAI, Type } from '@google/genai';
-import { lessonContent } from './prompts';
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GOOGLE_GENAI_API_KEY
 });
 
-const createLesson = async (title: string) => {
+const createLesson = async (title: string, surveyResponses: string) => {
 
-    const prompt = 'Create a lesson description and content for the following title: ' + title + '. The content should be detailed and should teach the student about the topic. 500-600 words for the content.';
+    const prompt = 'Create a lesson description and content for the following title: ' +  '. The content should be detailed and should teach the student about the topic. 500-600 words for the content. Here are survey responses you should incorporate into the content to make it more interesting based on their personality, study habits, and interests: ' + surveyResponses;
 
     const response = await ai.models.generateContent({
         model: 'gemini-2.0-flash',
@@ -16,32 +15,20 @@ const createLesson = async (title: string) => {
         config: {
             responseMimeType: 'application/json',
             responseSchema: {
-                type: Type.OBJECT,
-                properties: {
-                    description: { type: Type.STRING },
-                    content: { type: Type.STRING },
-                },
-                required: ['description', 'content'],
+                type: Type.STRING,
+                description: 'Provide as normal text.',
             },
         }
     });
 
-    const lessonObj = JSON.parse(response.text || '');
-    if (!lessonObj.description || !lessonObj.content)
-        throw new Error('Invalid lesson format.');
+    const content = response.text || '';
 
-    const lessonDescContent = {
-        description: lessonObj.description,
-        content: lessonObj.content,
-    };
-
-    const questions = await createQuestion(title, lessonDescContent.content);
+    const questions = await createQuestions(content);
 
     const lesson: ILesson = {
         title: title,
         isCompleted: false,
-        description: lessonDescContent.description,
-        content: lessonDescContent.content,
+        content: content,
         questions: questions.map((question: IQuestion) => ({
             question: question.question,
             answers: question.answers.map((answer: IAnswer) => ({
@@ -54,10 +41,10 @@ const createLesson = async (title: string) => {
     return lesson;
 }
 
-const createQuestion = async (title: string, content: string) => {
+const createQuestions = async (content: string) => {
 
-    const prompt = 'Create a question for the following content: ' + content + '. The title of the lesson is ' + title + '. The question should be related to the content and should have 4 possible answers, one of which is correct.';
-    console.log('bout to make question');
+    const prompt = 'Create a question for the following content: ' + content + '. The questions should be related to the content and should have 4 possible answers, one of which is correct.';
+    console.log('bout to make questions');
     const response = await ai.models.generateContent({
         model: 'gemini-2.0-flash',
         contents: prompt,
@@ -91,7 +78,7 @@ const createQuestion = async (title: string, content: string) => {
 
     const questions = JSON.parse(response.text || '');
 
-    console.log('finished making a question');
+    console.log('finished making questions');
 
     return questions.map((question: IQuestion) => ({
         question: question.question,
@@ -102,14 +89,12 @@ const createQuestion = async (title: string, content: string) => {
     }));
 }
 
-const createCourse = async (title: string, lessons: string[], auth0Id: string) => {
+const createCourse = async (title: string, lessons: string[], surveyResponses: string, auth0Id: string) => {
 
     console.log('bout to make course');
     const lessonsGenerated = [];
     for (const lessonTitle of lessons)
-    {
-        lessonsGenerated.push(await createLesson(lessonTitle));
-    }
+        lessonsGenerated.push(await createLesson(lessonTitle, surveyResponses));
 
     const course = await Course.create({
         title: title,

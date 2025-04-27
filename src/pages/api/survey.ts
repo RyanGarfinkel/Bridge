@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbconnect from '@/lib/dbConnection';
-import Survey, { ISurvey } from '@/models/Survey';
+import Survey from '@/models/Survey';
+import User from '@/models/User';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
@@ -14,18 +15,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     await dbconnect();
 
-    console.log('Survey:', survey);
+    const existingSurvey = await Survey.findOne({ auth0Id: auth0Id });
+    if (existingSurvey)
+        return res.status(403).json({ error: 'Survey already exists and cannot be modified.' });
 
-    const surveyObj = await Survey.findOneAndUpdate(
+    const surveyObj = await Survey.create({ auth0Id: auth0Id, ...survey });
+    if (!surveyObj)
+        return res.status(500).json({ error: 'Failed to create survey.' });
+
+    await User.updateOne(
         { auth0Id: auth0Id },
-        { ...survey, auth0Id: auth0Id },
-        { new: true }
+        { hasCompletedSurvey: true }
     );
 
-    if(!surveyObj)
-        return res.status(404).json({ error: 'Survey not found.' });
-
-    return res.status(200).json(surveyObj as ISurvey);
+    return res.status(204).end();
 };
 
 export default handler;

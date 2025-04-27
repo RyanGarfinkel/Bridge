@@ -1,7 +1,6 @@
 'use client';
 
 import { ICourse } from '@/models/Course';
-import { ISurvey } from '@/models/Survey';
 import { IUser } from '@/models/User';
 import { useUser } from '@auth0/nextjs-auth0';
 import React, { useState, useEffect } from 'react';
@@ -10,7 +9,7 @@ interface DataContextProps {
     isLoading: boolean;
     user: IUser | undefined;
     courses: ICourse[];
-    survey: ISurvey | undefined;
+    isFetchingCourses: boolean;
     updateSurvey: (survey: object) => void;
 }
 
@@ -23,9 +22,10 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     const [isLoading, setIsLoading] = useState(false);
     const [user, setUser] = useState<IUser | undefined>(undefined);
     const [courses, setCourses] = useState<ICourse[]>([]);
-    const [survey, setSurvey] = useState<ISurvey | undefined>(undefined);
+    const [isFetchingCourses, setIsFetchingCourses] = useState(false);
     const updateSurvey = async (survey: object) => {
 
+        console.log('Updating survey for user:', auth0User?.sub);
         const response = await fetch('/api/survey', {
             method: 'POST',
             headers: {
@@ -37,25 +37,31 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
             }),
         });
 
+        console.log('done updating survey:');
+        console.log(response.ok);
+
         if(response.ok)
-            setSurvey(await response.json());
+            fetchCourses();
         else
             throw new Error('Failed to update survey');
-    };
+    }; 
 
     useEffect(() => {
 
-        if(!auth0User || !auth0User.sub)
+        if(!auth0User)
         {
+        
             setUser(undefined);
             setCourses([]);
+
             setIsLoading(false);
             return;
         }
-       
-        const callback = async () => {
+        
+        const fetchUser = async () => {
 
             setIsLoading(true);
+
             const res = await fetch('/api/user', {
                 method: 'POST',
                 headers: {
@@ -63,34 +69,63 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
                 },
                 body: JSON.stringify({
                     auth0Id: auth0User?.sub,
-                    firstname: auth0User?.given_name,
-                    lastname: auth0User?.family_name,
                 }),
             });
-    
+
             if(res.ok)
             {
-                const { user, courses, survey } = await res.json();
-
+                const user = await res.json();
                 setUser(user);
-                setCourses(courses);
-                setSurvey(survey);
+
+                if(user.hasCompletedSurvey)
+                    fetchCourses();
+                else
+                    setCourses([]);
             }
             else
-            {
-                setUser(undefined);
-                setCourses([]);
-                throw new Error('Failed to fetch user and courses');
-            }
+                throw new Error('Failed to fetch user');
+
             setIsLoading(false);
         }
 
-        callback();
-
+        fetchUser();
+        
     }, [auth0User]);
 
+    const fetchCourses = async () => {
+
+        if(!auth0User || !auth0User.sub)
+        {
+            console.log('No auth0 user found. Cannot fetch courses.');
+            return;
+        }
+
+        console.log('Fetching courses for user:', auth0User.sub);
+
+        setIsFetchingCourses(true);
+        const res = await fetch('/api/courses', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                auth0Id: auth0User?.sub,
+            }),
+        });
+
+        setIsFetchingCourses(false);
+
+        if(res.ok)
+        {
+            const courses = await res.json();
+            setCourses(courses);
+        }
+        else
+            throw new Error('Failed to fetch courses');
+    }
+
     return (
-        <DataContext.Provider value={{ user, courses, isLoading, survey, updateSurvey }}>
+        <DataContext.Provider value={{ user, courses, isLoading, updateSurvey, isFetchingCourses, }}>
             {children}
         </DataContext.Provider>
     )

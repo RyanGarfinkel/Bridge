@@ -13,7 +13,7 @@ interface IQuestion {
 interface ILesson {
     title: string;
     isCompleted: boolean;
-    description: string;
+    // description: string;
     content: string;
     questions: IQuestion[];
 }
@@ -33,7 +33,7 @@ const courseSchema = new mongoose.Schema({
         {
             title: { type: String, required: true },
             isCompleted: { type: Boolean, default: false },
-            description: { type: String, required: true },
+            // description: { type: String, required: true },
             content: { type: String, required: true },
             questions: [
                 {

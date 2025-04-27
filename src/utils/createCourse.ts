@@ -1,4 +1,4 @@
-import Course, { ILesson } from '@/models/Course';
+import Course, { ILesson, IQuestion, IAnswer } from '@/models/Course';
 import { GoogleGenAI, Type } from '@google/genai';
 
 const ai = new GoogleGenAI({
@@ -69,6 +69,8 @@ const createCourse = async (prompt: string, auth0Id: string) => {
             throw new Error(`Lesson ${index} is missing content.`);
     });
 
+    console.log('Course object:', courseObj.lessons[0]);
+
     const course = await Course.create({
         title: courseObj.title,
         isCompleted: false,
@@ -78,8 +80,17 @@ const createCourse = async (prompt: string, auth0Id: string) => {
             isCompleted: false,
             description: lesson.description,
             content: lesson.content,
+            questions: lesson.questions.map((question: IQuestion) => ({
+                question: question.question,
+                answers: question.answers.map((answer: IAnswer) => ({
+                    text: answer.text,
+                    isCorrect: answer.isCorrect,
+                })),
+            })),
         })),
     });
+
+    console.log('Created course:', course);
 
     return course;
 };

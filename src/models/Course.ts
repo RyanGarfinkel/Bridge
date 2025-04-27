@@ -35,6 +35,17 @@ const courseSchema = new mongoose.Schema({
             isCompleted: { type: Boolean, default: false },
             description: { type: String, required: true },
             content: { type: String, required: true },
+            questions: [
+                {
+                    question: { type: String, required: true },
+                    answers: [
+                        {
+                            text: { type: String, required: true },
+                            isCorrect: { type: Boolean, required: true },
+                        },
+                    ],
+                },
+            ],
         },
     ],
 });
@@ -42,4 +53,4 @@ const courseSchema = new mongoose.Schema({
 const Course = mongoose.models.Course || mongoose.model<ICourse>('Course', courseSchema);
 
 export default Course;
-export type { ICourse, ILesson };
+export type { ICourse, ILesson, IQuestion, IAnswer };

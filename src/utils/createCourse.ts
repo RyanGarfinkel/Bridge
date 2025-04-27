@@ -6,7 +6,7 @@ const ai = new GoogleGenAI({
 });
 
 const createLesson = async (title: string, surveyResponses: string): Promise<ILesson> => {
-    const prompt = `Write a detailed and engaging lesson on the topic "${title}". Use the following survey responses to make the lesson more personalized: ${surveyResponses}. The lesson should be clear, easy to understand, and around 500-600 words. Format the lesson in Markdown, using **bold**, *italics*, and other Markdown features where appropriate. Add emojis where they enhance the content (e.g., 🎉 for excitement, 📚 for learning).`;
+    const prompt = `Write a detailed and engaging lesson on the topic "${title}". Use the following survey responses to make the lesson more personalized: ${surveyResponses}. The lesson should be clear, easy to understand, and around 500-600 words. Do not include any titles or headings—just provide the lesson content as plain text.`;
 
     const response = await ai.models.generateContent({
         model: 'gemini-2.0-flash',
@@ -16,7 +16,7 @@ const createLesson = async (title: string, surveyResponses: string): Promise<ILe
         },
     });
 
-    const content = (response.text || '').replace(/\\n/g, '\n').trim();
+    const content = (response.text || '').replace(/\\n/g, ' ').trim();
 
     const questions = await createQuestions(content);
 
@@ -29,22 +29,14 @@ const createLesson = async (title: string, surveyResponses: string): Promise<ILe
 };
 
 const createQuestions = async (content: string): Promise<IQuestion[]> => {
-    const prompt = `Based on the following lesson content: "${content}", generate exactly 4 multiple-choice questions. Each question must have:
+    const prompt = `Based on the following lesson content: "${content}", generate 4 multiple-choice questions. Each question should have 4 possible answers, with one correct answer. Provide the questions and answers as plain text, formatted like this:
     
-    1. A clear and concise question.
-    2. Exactly 4 answer options labeled as "a)", "b)", "c)", and "d)".
-    3. Only one correct answer, clearly marked with "✅ Correct Answer: [Correct answer letter]".
-
-    Format the output in Markdown like this:
-
-    **Question 1:** [Your question here]  
-    - a) [Answer 1]  
-    - b) [Answer 2]  
-    - c) [Answer 3]  
-    - d) [Answer 4]  
-    ✅ **Correct Answer:** [Correct answer letter]
-
-    Ensure the correct answer is accurate and corresponds to one of the provided options.`;
+    Question 1: [Your question here]
+    a) [Answer 1]
+    b) [Answer 2]
+    c) [Answer 3]
+    d) [Answer 4]
+    Correct Answer: [Correct answer letter]`;
 
     console.log('Generating questions...');
     const response = await ai.models.generateContent({
@@ -55,7 +47,7 @@ const createQuestions = async (content: string): Promise<IQuestion[]> => {
         },
     });
 
-    const questionsText = (response.text || '').replace(/\\n/g, '\n').trim();
+    const questionsText = (response.text || '').replace(/\\n/g, ' ').trim();
     console.log('Finished generating questions.');
 
     return parseQuestions(questionsText);

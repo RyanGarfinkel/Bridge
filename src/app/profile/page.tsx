@@ -68,30 +68,8 @@ export default function UserProfile() {
     );
 
   return (
-    <div
-    style={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100vh",
-      width: "100vw",
-      flexDirection: "column",
-      textAlign: "center",
-      fontFamily: "sans-serif",
-      gap: "20px",
-      padding: "20px",
-      boxSizing: "border-box",
-    }}
-  >
-    <h1 style={{ fontSize: "3rem", margin: 0 }}>Welcome to Bridgly 🌉</h1>
-    <p style={{ fontSize: "1.5rem", maxWidth: "600px" }}>
-    Our AI-powered college readiness training program is designed to help incoming university students transition smoothly into academic life, with lesson plans custom tailored to their interests and study style.
-    </p>
-    <Button variant="default" asChild>
-      <a href="/auth/login" style={{ fontSize: "1.25rem", padding: "10px 20px" }}>
-        Log In
-      </a>
-    </Button>
-  </div>
+    <div className='flex justify-center items-center h-screen w-screen font-sans text-center'>
+        <h1 style={{ fontSize: '3rem' }}>Loading...</h1>
+      </div>
   );
 }

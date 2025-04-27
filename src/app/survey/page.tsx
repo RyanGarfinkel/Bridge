@@ -190,13 +190,13 @@ export default function Survey() {
       </div>
 
       <div className="grid w-full items-center gap-1.5">
-        <label htmlFor="travelDestination" className="text-lg">If you could go anywhere in the world, where would you like to go? 🐻</label>
-        <input id="travelDestination" name="travelDestination" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <label htmlFor="instantSkill" className="text-lg">If you could master any skill instantly, what would it be?</label>
+        <input id="instantSkill" name="instantSkill" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
       </div>
 
       <div className="grid w-full items-center gap-1.5">
-        <label htmlFor="instantSkill" className="text-lg">If you could master any skill instantly, what would it be?</label>
-        <input id="instantSkill" name="instantSkill" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <label htmlFor="travelDestination" className="text-lg">If you could go anywhere in the world, where would you like to go? 🐻</label>
+        <input id="travelDestination" name="travelDestination" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
       </div>
 
       <button type="submit" className="mt-5 mb-10 px-5 py-2 bg-black text-white rounded cursor-pointer text-lg">

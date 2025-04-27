@@ -1,10 +1,21 @@
 import mongoose, { Document } from 'mongoose';
 
+interface IAnswer {
+    text: string;
+    isCorrect: boolean;
+}
+
+interface IQuestion {
+    question: string;
+    answers: IAnswer[];
+}
+
 interface ILesson {
     title: string;
     isCompleted: boolean;
     description: string;
     content: string;
+    questions: IQuestion[];
 }
 
 interface ICourse extends Document {

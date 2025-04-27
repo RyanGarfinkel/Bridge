@@ -26,8 +26,6 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     const [survey, setSurvey] = useState<ISurvey | undefined>(undefined);
     const updateSurvey = async (survey: object) => {
 
-        console.log('survey in updateSurvey:', survey);
-
         const response = await fetch('/api/survey', {
             method: 'POST',
             headers: {

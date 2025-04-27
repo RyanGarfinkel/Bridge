@@ -38,9 +38,6 @@ export default function Home() {
       </div>
     );
 
-  console.log('Courses:', courses);
-  console.log('User:', user);
-
   if(user && user.hasCompletedSurvey)
     return (
       <div className='flex justify-center items-center h-screen w-screen font-sans text-center flex-col gap-5 m-0 p-0 box-border'>

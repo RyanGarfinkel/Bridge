@@ -103,8 +103,6 @@ const createCourse = async (title: string, lessons: string[], surveyResponses: s
         lessons: lessonsGenerated,
     });
 
-    console.log('Created course:');
-
     return course;
 
 

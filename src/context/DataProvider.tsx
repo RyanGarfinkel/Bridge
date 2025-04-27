@@ -24,8 +24,6 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     const [courses, setCourses] = useState<ICourse[]>([]);
     const [isFetchingCourses, setIsFetchingCourses] = useState(false);
     const updateSurvey = async (survey: object) => {
-
-        console.log('Updating survey for user:', auth0User?.sub);
         const response = await fetch('/api/survey', {
             method: 'POST',
             headers: {
@@ -36,9 +34,6 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
                 survey: survey,
             }),
         });
-
-        console.log('done updating survey:');
-        console.log(response.ok);
 
         if(response.ok)
             fetchCourses();
@@ -69,6 +64,8 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
                 },
                 body: JSON.stringify({
                     auth0Id: auth0User?.sub,
+                    firstname: auth0User?.given_name,
+                    lastname: auth0User?.family_name,
                 }),
             });
 

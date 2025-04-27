@@ -187,7 +187,7 @@ export default function StudyAndQuizPage() {
                           gridColumn: optionIndex === 3 ? 'span 3' : 'auto', // Make the fourth button span three columns
                         }}
                       >
-                        {option.text}
+                        {option.text.replace(/^\)/, '')}
                       </button>
                     ))}
                   </div>

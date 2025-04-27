@@ -1,13 +1,21 @@
+import { useEffect } from "react";
 
 const Loading = () => {
-    return (
-      <div className="flex justify-center items-center h-screen w-screen font-sans text-center bg-gray-50">
-        <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
-          <h1 className="text-2xl text-gray-700">Loading...</h1>
-        </div>
+  useEffect(() => {
+    return () => {
+      // Trigger a page reload when the component unmounts
+      window.location.reload();
+    };
+  }, []);
+
+  return (
+    <div className="flex justify-center items-center h-screen w-screen font-sans text-center bg-gray-50">
+      <div className="flex flex-col items-center gap-4">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+        <h1 className="text-2xl text-gray-700">Customizing your courses...</h1>
       </div>
-    );
-  };
-  
-  export default Loading;
+    </div>
+  );
+};
+
+export default Loading;

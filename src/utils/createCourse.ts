@@ -29,14 +29,22 @@ const createLesson = async (title: string, surveyResponses: string): Promise<ILe
 };
 
 const createQuestions = async (content: string): Promise<IQuestion[]> => {
-    const prompt = `Based on the following lesson content: "${content}", generate 4 multiple-choice questions. Each question should have 4 possible answers, with only one correct answer. Provide the questions and answers formatted in Markdown, like this:
+    const prompt = `Based on the following lesson content: "${content}", generate exactly 4 multiple-choice questions. Each question must have:
     
+    1. A clear and concise question.
+    2. Exactly 4 answer options labeled as "a)", "b)", "c)", and "d)".
+    3. Only one correct answer, clearly marked with "✅ Correct Answer: [Correct answer letter]".
+
+    Format the output in Markdown like this:
+
     **Question 1:** [Your question here]  
     - a) [Answer 1]  
     - b) [Answer 2]  
     - c) [Answer 3]  
     - d) [Answer 4]  
-    ✅ **Correct Answer:** [Correct answer letter]`;
+    ✅ **Correct Answer:** [Correct answer letter]
+
+    Ensure the correct answer is accurate and corresponds to one of the provided options.`;
 
     console.log('Generating questions...');
     const response = await ai.models.generateContent({

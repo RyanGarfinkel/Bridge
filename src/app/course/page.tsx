@@ -22,6 +22,7 @@ export default function StudyAndQuizPage() {
 
     const [course, setCourse] = useState<ICourse>();
     const [lesson, setLesson] = useState<ILesson>();
+    const [correctAnswers, setCorrectAnswers] = useState(0); // State to track the number of correct answers
 
   useEffect(() => {
 
@@ -153,71 +154,72 @@ export default function StudyAndQuizPage() {
           {lesson?.questions && lesson.questions.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%', maxWidth: '600px', alignItems: 'center' }}>
               {lesson.questions.map((question, index) => (
-            <div key={index} style={{ marginBottom: '40px', textAlign: 'center', width: '100%' }}>
-              <p style={{ fontSize: '1.5rem', marginBottom: '20px' }}>{question.question}</p>
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-                  gap: '15px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                {question.answers.map((option, optionIndex) => (
-                  <button
-                key={optionIndex}
-                onClick={() => {
-                  if (option.isCorrect) {
-                    alert('Correct!');
-                  } else {
-                    alert('Wrong!');
-                  }
-                }}
-                style={{
-                  padding: '15px',
-                  backgroundColor: '#f0f0f0',
-                  border: '1px solid #ccc',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  fontSize: '1.25rem',
-                  textAlign: 'center',
-                }}
+                <div key={index} style={{ marginBottom: '20px', textAlign: 'center', width: '100%' }}>
+                  <p style={{ fontSize: '1.5rem', marginBottom: '20px' }}>{question.question}</p>
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                      gap: '15px',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
                   >
-                {option.text}
-                  </button>
-                ))}
-
-              </div>
-            </div>
+                    {question.answers.map((option, optionIndex) => (
+                      <button
+                        key={optionIndex}
+                        onClick={() => {
+                          if (option.isCorrect) {
+                            alert('Correct!');
+                            setCorrectAnswers((prev) => prev + 1); // Increment correct answers count
+                          } else {
+                            alert('Wrong!');
+                          }
+                        }}
+                        style={{
+                          padding: '15px',
+                          backgroundColor: '#f0f0f0',
+                          border: '1px solid #ccc',
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          fontSize: '1.25rem',
+                          textAlign: 'center',
+                          gridColumn: optionIndex === 3 ? 'span 3' : 'auto', // Make the fourth button span three columns
+                        }}
+                      >
+                        {option.text}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               ))}
 
-            <button
-            onClick={() => {
-                // Mark the lesson as complete
-                if (lesson) {
-                    completeLesson(course!, lesson) // Update the isCompleted property
-                    alert('Lesson marked as complete!');
-                }
-                // Navigate back to the template page with the unit parameter
-                const unitParam = course?.title?.replace(/\s+/g, '-').toLowerCase(); // Format the course title for the URL
-                window.location.href = `/template?unit=${unitParam}`; // Replace '/template' with the actual path to your template page
-            }}
-            style={{
-                marginTop: '20px',
-                padding: '10px 20px',
-                backgroundColor: '#28a745',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '1.25rem',
-            }}
-            >
-            Complete Lesson & Return to Unit
-            </button>
+              <button
+                onClick={() => {
+                  // Mark the lesson as complete
+                  if (lesson) {
+                    completeLesson(course!, lesson); // Update the isCompleted property
+                    alert(`Lesson marked as complete! You answered ${correctAnswers} questions correctly.`);
+                  }
+                  // Navigate back to the template page with the unit parameter
+                  const unitParam = course?.title?.replace(/\s+/g, '-').toLowerCase(); // Format the course title for the URL
+                  window.location.href = `/template?unit=${unitParam}`; // Replace '/template' with the actual path to your template page
+                }}
+                style={{
+                  marginTop: '10px', // Reduced margin to make the space smaller
+                  padding: '10px 20px',
+                  backgroundColor: correctAnswers < 4 ? '#ccc' : '#000', // Greyed out if less than 4 correct answers
+                  color: correctAnswers < 4 ? '#666' : '#fff', // Adjust text color for greyed-out button
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: correctAnswers < 4 ? 'not-allowed' : 'pointer', // Disable pointer if less than 4 correct answers
+                  fontSize: '1.25rem',
+                }}
+                disabled={correctAnswers < 4} // Disable button if less than 4 correct answers
+              >
+                Complete Lesson & Return to Unit
+              </button>
             </div>
-            
           ) : (
             <p style={{ fontSize: '1.25rem', lineHeight: '1.8', textAlign: 'center' }}>No questions available for this lesson.</p>
           )}

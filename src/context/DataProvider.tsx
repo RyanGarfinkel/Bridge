@@ -119,6 +119,12 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
     const completeLesson = async (course: ICourse, lesson: ILesson) => {
 
+        const updatedLessons = course.lessons.map((l) =>
+            l.title === lesson.title ? { ...l, isCompleted: true } : l
+        );
+
+        const isCourseCompleted = updatedLessons.every((l) => l.isCompleted);
+
         const res = await fetch('/api/updateCourse', {
             method: 'PUT',
             headers: {
@@ -127,18 +133,18 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
             body: JSON.stringify({
                 course: {
                     ...course,
-                    lessons: course.lessons.map((l) => l.title === lesson.title ? { ...l, isCompleted: true } : l),
+                    lessons: updatedLessons,
+                    isCompleted: isCourseCompleted,
                 },
             }),
         });
 
-        if(res.ok)
-        {
+        if (res.ok) {
             const updatedCourse = await res.json();
             setCourses(courses.map((c) => c._id === updatedCourse._id ? updatedCourse : c));
-        }
-        else
+        } else {
             throw new Error('Failed to update course');
+        }
     };
 
     return (

@@ -31,7 +31,7 @@ export default function Home() {
 
   if (user && user.hasCompletedSurvey)
     return (
-      <div className="flex flex-col items-center justify-start min-h-screen w-full font-sans text-center gap-10 p-8 box-border">
+      <div className="flex flex-col items-center justify-center min-h-screen w-full font-sans text-center gap-10 p-8 box-border">
         <header className="w-full max-w-4xl text-center">
           <h1 className="text-5xl font-extrabold mb-4">👋 Welcome, {user.firstname + ' ' + user.lastname}!</h1>
           <p className="text-xl text-gray-600">🎓 Here are your available courses. Start learning or continue where you left off!</p>

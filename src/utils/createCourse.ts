@@ -29,7 +29,7 @@ const createLesson = async (title: string, surveyResponses: string): Promise<ILe
 };
 
 const createQuestions = async (content: string): Promise<IQuestion[]> => {
-    const prompt = `Based on the following lesson content: "${content}", generate 4 multiple-choice questions. Each question should have 4 possible answers, with one correct answer. Provide the questions and answers formatted in Markdown, like this:
+    const prompt = `Based on the following lesson content: "${content}", generate 4 multiple-choice questions. Each question should have 4 possible answers, with only one correct answer. Provide the questions and answers formatted in Markdown, like this:
     
     **Question 1:** [Your question here]  
     - a) [Answer 1]  

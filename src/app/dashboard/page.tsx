@@ -3,6 +3,8 @@
 import { Button } from '@/components/ui/button';
 import { useData } from '@/context/DataProvider';
 import { useEffect } from 'react';
+import SurveyPrompt from '@/components/SurveyPrompt';
+import Loading from '@/components/Loading';
 
 export default function Home() {
   const { user, courses, isLoading, isFetchingCourses } = useData();
@@ -12,11 +14,9 @@ export default function Home() {
       window.location.href = '/auth/login';
   }, [user, isLoading]);
 
-  if(isFetchingCourses)
+  if(true || isFetchingCourses)
     return (
-      <div className='flex justify-center items-center h-screen w-screen font-sans text-center'>
-        <h1 style={{ fontSize: '3rem' }}>Loading...</h1>
-      </div>
+      <Loading />
     );
 
 
@@ -28,15 +28,7 @@ export default function Home() {
     );
 
   if(user && !user.hasCompletedSurvey)
-    return (
-      <div className='flex justify-center items-center h-screen w-screen font-sans text-center flex-col gap-5 m-0 p-0 box-border'>
-        <h1 className="text-3xl">Welcome, {user.firstname + ' ' + user.lastname}.</h1>
-        <h3 className="text-2xl">Please complete the survey to get started ✏️</h3>
-        <Button variant="outline" asChild>
-          <a href="/survey">Start Survey</a>
-        </Button>
-      </div>
-    );
+    return <SurveyPrompt firstname={user.firstname || ''} lastname={user.lastname || ''} />;
 
   if(user && user.hasCompletedSurvey)
     return (

@@ -1,6 +1,6 @@
 'use client';
 
-import { ICourse } from '@/models/Course';
+import { ICourse, ILesson } from '@/models/Course';
 import { IUser } from '@/models/User';
 import { useUser } from '@auth0/nextjs-auth0';
 import React, { useState, useEffect } from 'react';
@@ -11,6 +11,7 @@ interface DataContextProps {
     courses: ICourse[];
     isFetchingCourses: boolean;
     updateSurvey: (survey: object) => void;
+    completeLesson: (course: ICourse, lesson: ILesson) => void;
 }
 
 const DataContext = React.createContext<DataContextProps | undefined>(undefined);
@@ -116,8 +117,32 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
             throw new Error('Failed to fetch courses');
     }
 
+    const completeLesson = async (course: ICourse, lesson: ILesson) => {
+
+        const res = await fetch('/api/updateCourse', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                course: {
+                    ...course,
+                    lessons: course.lessons.map((l) => l.title === lesson.title ? { ...l, isCompleted: true } : l),
+                },
+            }),
+        });
+
+        if(res.ok)
+        {
+            const updatedCourse = await res.json();
+            setCourses(courses.map((c) => c._id === updatedCourse._id ? updatedCourse : c));
+        }
+        else
+            throw new Error('Failed to update course');
+    };
+
     return (
-        <DataContext.Provider value={{ user, courses, isLoading, updateSurvey, isFetchingCourses, }}>
+        <DataContext.Provider value={{ user, courses, isLoading, updateSurvey, isFetchingCourses, completeLesson}}>
             {children}
         </DataContext.Provider>
     )

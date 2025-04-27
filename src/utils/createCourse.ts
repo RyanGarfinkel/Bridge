@@ -5,7 +5,6 @@ const ai = new GoogleGenAI({
     apiKey: process.env.GOOGLE_GENAI_API_KEY,
 });
 
-// Function to create a lesson
 const createLesson = async (title: string, surveyResponses: string): Promise<ILesson> => {
     const prompt = `Write a detailed and engaging lesson on the topic "${title}". Use the following survey responses to make the lesson more personalized: ${surveyResponses}. The lesson should be clear, easy to understand, and around 500-600 words. Do not include any titles or headings—just provide the lesson content as plain text.`;
 
@@ -17,19 +16,18 @@ const createLesson = async (title: string, surveyResponses: string): Promise<ILe
         },
     });
 
-    const content = (response.text || '').replace(/\\n/g, ' ').trim(); // Clean up the content
+    const content = (response.text || '').replace(/\\n/g, ' ').trim();
 
     const questions = await createQuestions(content);
 
     return {
-        title: title.split('-')[0], // Use the first part of the title
+        title: title.split('-')[0],
         isCompleted: false,
         content: content,
         questions,
     };
 };
 
-// Function to create questions
 const createQuestions = async (content: string): Promise<IQuestion[]> => {
     const prompt = `Based on the following lesson content: "${content}", generate 4 multiple-choice questions. Each question should have 4 possible answers, with one correct answer. Provide the questions and answers as plain text, formatted like this:
     
@@ -49,28 +47,26 @@ const createQuestions = async (content: string): Promise<IQuestion[]> => {
         },
     });
 
-    const questionsText = (response.text || '').replace(/\\n/g, ' ').trim(); // Clean up the response
+    const questionsText = (response.text || '').replace(/\\n/g, ' ').trim();
     console.log('Finished generating questions.');
 
     return parseQuestions(questionsText);
 };
 
-// Helper function to parse plain text questions into structured format
 const parseQuestions = (questionsText: string): IQuestion[] => {
     const questions: IQuestion[] = [];
-    const questionBlocks = questionsText.split('Question ').slice(1); // Split by "Question" and ignore the first empty part
+    const questionBlocks = questionsText.split('Question ').slice(1);
 
     for (const block of questionBlocks) {
         const lines = block.split('\n').map((line) => line.trim());
         const questionLine = lines[0];
         const answers = lines.slice(1, 5).map((line) => ({
-            text: line.slice(3).trim(), // Remove "a) ", "b) ", etc.
-            isCorrect: false, // Default to false; we'll set the correct answer below
+            text: line.slice(3).trim(),
+            isCorrect: false,
         }));
         const correctAnswerLine = lines[5];
         const correctAnswerLetter = correctAnswerLine.split(':')[1].trim();
 
-        // Mark the correct answer
         const correctIndex = correctAnswerLetter.charCodeAt(0) - 'a'.charCodeAt(0);
         if (answers[correctIndex]) {
             answers[correctIndex].isCorrect = true;
@@ -85,7 +81,6 @@ const parseQuestions = (questionsText: string): IQuestion[] => {
     return questions;
 };
 
-// Function to create a course
 const createCourse = async (title: string, lessons: string[], surveyResponses: string, auth0Id: string) => {
     console.log('Starting course creation...');
     const lessonsGenerated: ILesson[] = [];

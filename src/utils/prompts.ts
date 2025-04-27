@@ -51,7 +51,7 @@ const financialLiteracy = [
     'Planning for Your Financial Future - Encourage students to think ahead beyond college (Setting financial goals, Seeking financial advice when needed, Building a positive, sustainable money mindset)'
 ];
 
-const prompts = [academicLife, mentalHealth, healthyRelationships]; // drinkingAndSubstanceAbuse, financialLiteracy];
+const prompts = [academicLife, mentalHealth, healthyRelationships, drinkingAndSubstanceAbuse, financialLiteracy];
 
 export { lessonContent, unitTitles };
 export default prompts;

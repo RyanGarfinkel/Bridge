@@ -14,7 +14,7 @@ export default function Home() {
       window.location.href = '/auth/login';
   }, [user, isLoading]);
 
-  if(true || isFetchingCourses)
+  if(isFetchingCourses)
     return (
       <Loading />
     );

@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bridgly 🌉
 
-## Getting Started
+Bridgly is an AI-powered college readiness training platform designed to help incoming university students transition smoothly into college life. By leveraging personalized content and interactive quizzes, Bridgly ensures students are equipped with the knowledge and skills they need to succeed academically, socially, and emotionally.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🎥 Video Demo
+[![Watch the video demo](https://img.youtube.com/vi/9yDFQ8lRcic/0.jpg)](https://www.youtube.com/watch?v=9yDFQ8lRcic)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
+- **Frontend**: React, Next.js, Tailwind CSS
+- **Backend**: Node.js, Express, MongoDB
+- **AI Integration**: Google GenAI (Gemini 2.0)
+- **Authentication**: Auth0
+- **Deployment**: Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🚀 Features
+- **Personalized Lessons**: AI-generated lessons tailored to the user's preferences from survey responses.
+- **Interactive Quizzes**: Multiple-choice quizzes to reinforce learning, with real-time feedback.
+- **User-Friendly Dashboard**: Track progress and access courses easily.
+- **Customizable Content**: Lessons and quizzes adapt to the user's learning style and interests.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🖥️ How to Run Locally
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Prerequisites
+Make sure to have the following:
+- **Node.js**
+- **MongoDB**
+- **Auth0 account**
+- **Google GenAI API key**
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Steps
+1. Install dependencies:
+    ```bash
+    npm install
+    ```
+2. Build the project:
+    ```bash
+    npm run build
+    ```
+3. Start the development server:
+    ```bash
+    npm start
+    ```

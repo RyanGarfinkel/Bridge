@@ -70,11 +70,11 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     
             if(res.ok)
             {
-                const { user, courses } = await res.json();
+                const { user, courses, survey } = await res.json();
 
                 setUser(user);
                 setCourses(courses);
-                setSurvey(user.survey);
+                setSurvey(survey);
             }
             else
             {

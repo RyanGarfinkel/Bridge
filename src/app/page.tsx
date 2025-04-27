@@ -50,7 +50,7 @@ export default function Home() {
   >
     <h1 style={{ fontSize: '3rem', margin: 0 }}>Welcome to Bridgly 🌉</h1>
     <p style={{ fontSize: '1.5rem', maxWidth: '600px' }}>
-    Our AI-powered college readiness training program is designed to help incoming university students transition smoothly into academic life, with lesson plans custom tailored to their interests and study style.
+    Our AI-powered college readiness training program is designed to help incoming university students from all around the world transition smoothly to their college life.
     </p>
     <Button variant="default" asChild>
       <a href="/auth/login" style={{ fontSize: '1.25rem', padding: '10px 20px' }}>

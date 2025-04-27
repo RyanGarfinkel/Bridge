@@ -7,12 +7,12 @@ import Course, { ICourse } from '@/models/Course';
 import Survey, { ISurvey } from '@/models/Survey';
 import pLimit from 'p-limit';
 
-const retryWithBackoff = async <T>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> => {
+const retryWithBackoff = async <T>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T | undefined> => {
     while (retries > 0) {
         try {
             return await fn();
-        } catch (error: any) {
-            if (error.message.includes('429')) {
+        } catch (error: unknown) {
+            if (error instanceof Error && error.message.includes('429')) {
                 console.warn(`Rate limit exceeded. Retrying in ${delay / 1000}s...`);
                 await new Promise((resolve) => setTimeout(resolve, delay));
                 retries--;
@@ -23,6 +23,7 @@ const retryWithBackoff = async <T>(fn: () => Promise<T>, retries = 3, delay = 10
         }
     }
     throw new Error('Failed after multiple retries.');
+    return undefined as never; // Ensures the function satisfies the return type
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

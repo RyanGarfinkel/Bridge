@@ -4,6 +4,15 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useData } from '@/context/DataProvider';
 import { ICourse, ILesson } from '@/models/Course';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
+const toMarkdown = (text: string) => {
+  return text
+    .replace(/^```markdown\s*|```$/g, '') // Remove ```markdown and ```
+    .trim();
+}
+
 
 export default function StudyAndQuizPage() {
   const [currentPart, setCurrentPart] = useState(1); // State to track the current part (1 or 2)
@@ -17,8 +26,8 @@ export default function StudyAndQuizPage() {
   useEffect(() => {
 
     const queryParams = new URLSearchParams(window.location.search);
-    const courseName = queryParams.get("unit")?.replace(/-/g, ' ').replace(/^\w/, char => char.toUpperCase());
-    const lessonName = queryParams.get("lesson")?.replace(/^\w/, char => char.toUpperCase());
+    const courseName = queryParams.get('unit')?.replace(/-/g, ' ').replace(/^\w/, char => char.toUpperCase());
+    const lessonName = queryParams.get('lesson')?.replace(/^\w/, char => char.toUpperCase());
     const courseObj = courses.find((course) => course.title === courseName);
     console.log(courseName)
     console.log(courses)
@@ -94,11 +103,13 @@ export default function StudyAndQuizPage() {
             }}
           >
             {lesson?.content ? (
-              <div>
+              <div className=''>
                 <h3 style={{ fontSize: '1.5rem', marginBottom: '10px' }}>Lesson Content:</h3>
-                <p style={{ fontSize: '1.25rem', lineHeight: '1.8' }}>
-                  {lesson.content.replace(/['"\\/]/g, '')}
-                </p>
+                <div className="max-w-6xl mx-auto overflow-y-auto max-h-[70vh] p-4 box-border">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {lesson?.content ? toMarkdown(lesson.content) : ''}
+                  </ReactMarkdown>
+                </div>
               </div>
             ) : (
               <p style={{ fontSize: '1.25rem', lineHeight: '1.8' }}>No content available for this lesson.</p>

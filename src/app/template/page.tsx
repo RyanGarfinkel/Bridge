@@ -3,7 +3,6 @@
 import { Button } from '@/components/ui/button';
 import { useData } from '@/context/DataProvider';
 import { ICourse } from '@/models/Course';
-import { set } from 'mongoose';
 import { useRouter } from 'next/navigation'; // Correct import for client components
 import { useEffect, useState } from 'react';
 

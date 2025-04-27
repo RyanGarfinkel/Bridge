@@ -1,9 +1,10 @@
 'use client';
 
-import { Button } from "@/components/ui/button";
-import { useData } from "@/context/DataProvider";
-import { useUser } from "@auth0/nextjs-auth0";
-import Link from "next/link";
+import { Button } from '@/components/ui/button';
+import { useData } from '@/context/DataProvider';
+import { useUser } from '@auth0/nextjs-auth0';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function UserProfile() {
   const { user, isLoading } = useData();
@@ -11,8 +12,8 @@ export default function UserProfile() {
 
   if (isLoading)
     return (
-      <div className='flex justify-center items-center h-screen w-screen font-sans text-center'>
-        <h1 style={{ fontSize: '3rem' }}>Loading...</h1>
+      <div className="flex justify-center items-center h-screen w-screen font-sans text-center">
+        <h1 className="text-3xl">Loading...</h1>
       </div>
     );
 
@@ -21,49 +22,25 @@ export default function UserProfile() {
 
   if (user)
     return (
-      <div
-        style={{
-            display: "flex",
-            justifyContent: "center", // Centers horizontally
-            alignItems: "center", // Centers vertically
-            height: "100vh", // Full viewport height
-            width: "100vw", // Full viewport width
-            fontFamily: "sans-serif",
-            textAlign: "center",
-            flexDirection: "column", // Stack text and buttons vertically
-            gap: "20px", // Add spacing between elements
-            margin: 0, // Ensure no margin
-            padding: 0, // Ensure no padding
-            boxSizing: "border-box", // Consistent box model
-        }}
-            >
+      <div className="flex justify-center items-center h-screen w-screen font-sans text-center flex-col gap-5 m-0 p-0 box-border">
         {/* Profile Picture */}
-        <img
-          src={auth0User?.picture || "/default-profile.png"}
-          alt={`${user.firstname}'s profile`}
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = "/default-profile.png";
-          }}
-          style={{
-            borderRadius: "50%",
-            width: "150px",
-            height: "150px",
-            objectFit: "cover",
-          }}
-        />
+        <Image
+          src={auth0User?.picture || '/default-profile.png'}
+          onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) =>
+          {
+            e.currentTarget.src = '/default-profile.png';
+          } }
+          className="rounded-full w-36 h-36 object-cover" alt={''}        />
 
         {/* User Title */}
-        <h1 style={{ fontSize: "2rem", fontWeight: "bold" }}>
-          Hello, {user.firstname}.
-        </h1>
+        <h1 className="text-2xl font-bold">Hello, {user.firstname}.</h1>
 
         {/* Survey Button */}
         <Button variant="outline" asChild>
           <Link href="/survey">
-            {user.hasCompletedSurvey ? "Redo Survey" : "Complete Survey"}
+            {user.hasCompletedSurvey ? 'Redo Survey' : 'Complete Survey'}
           </Link>
         </Button>
-
       </div>
     );
 

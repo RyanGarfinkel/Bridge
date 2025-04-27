@@ -1,4 +1,4 @@
-import { Calendar, Hand, Home, Inbox, Search, Settings } from "lucide-react"
+import { Calendar, Hand, Home, Inbox, Search, Settings } from 'lucide-react'
  
 import {
   Sidebar,
@@ -9,23 +9,23 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from '@/components/ui/sidebar'
  
 // Menu items.
 const items = [
   {
-    title: "Home",
-    url: "/dashboard",
+    title: 'Home',
+    url: '/dashboard',
     icon: Home,
   },
   {
-    title: "Profile",
-    url: "/profile",
+    title: 'Profile',
+    url: '/profile',
     icon: Settings,
   },
   {
-    title: "Log Out",
-    url: "/auth/logout",
+    title: 'Log Out',
+    url: '/auth/logout',
     icon: Hand,
   },
 ]

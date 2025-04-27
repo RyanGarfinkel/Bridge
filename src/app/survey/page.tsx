@@ -22,32 +22,32 @@ export default function Survey() {
 
       <div className="grid w-full items-center gap-1.5">
         <label htmlFor="name" className="text-lg">What&apos;s your name?</label>
-        <input id="name" name="name" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <input id="name" name="name" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" required />
       </div>
 
       <div className="grid w-full items-center gap-1.5">
         <label htmlFor="dob" className="text-lg">When were you born?</label>
-        <input id="dob" name="dob" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="date" />
+        <input id="dob" name="dob" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="date" required />
       </div>
 
       <div className="grid w-full items-center gap-1.5">
         <label htmlFor="loc" className="text-lg">Where are you from?</label>
-        <input id="loc" name="loc" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <input id="loc" name="loc" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" required/>
       </div>
 
       <div className="grid w-full items-center gap-1.5">
         <label htmlFor="pronouns" className="text-lg">Where are your pronouns?</label>
-        <input id="pronouns" name="pronouns" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <input id="pronouns" name="pronouns" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" required/>
       </div>
 
       <div className="grid w-full items-center gap-1.5">
         <label htmlFor="pets" className="text-lg">Do you have pets? If so, what kind?</label>
-        <input id="pets" name="pets" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <input id="pets" name="pets" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" required />
       </div>
 
       <div className="grid w-full items-center gap-1.5">
         <label htmlFor="university" className="text-lg">Which university do you go to?</label>
-        <input id="university" name="university" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <input id="university" name="university" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" required />
       </div>
 
       <div className="grid w-full items-center gap-1.5">
@@ -149,54 +149,54 @@ export default function Survey() {
 
       <div className="grid w-full items-center gap-1.5">
         <label htmlFor="relaxing" className="text-lg">What&apos;s your favorite way to unwind after a long day?</label>
-        <input id="relaxing" name="relaxing" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <input id="relaxing" name="relaxing" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" required />
       </div>
 
       <div className="grid w-full items-center gap-1.5">
         <label htmlFor="hobby" className="text-lg">What are your biggest hobbies?</label>
-        <input id="hobby" name="hobby" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <input id="hobby" name="hobby" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" required/>
       </div>
 
       <div className="grid w-full items-center gap-1.5">
         <label htmlFor="holiday" className="text-lg">What’s your favorite holiday or celebration?</label>
-        <input id="holiday" name="holiday" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <input id="holiday" name="holiday" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" required />
       </div>
 
       <div className="grid w-full items-center gap-1.5">
         <label htmlFor="sensory" className="text-lg">What&apos;s a smell, sound, or texture that instantly brings you comfort?</label>
-        <input id="sensory" name="sensory" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <input id="sensory" name="sensory" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" required />
       </div>
 
 
       <div className="grid w-full items-center gap-1.5">
         <label htmlFor="fictionalCharacter" className="text-lg">Which fictional character would you want as a study buddy??</label>
-        <input id="fictionalCharacter" name="fictionalCharacter" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <input id="fictionalCharacter" name="fictionalCharacter" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" required />
       </div>
 
 
       <div className="grid w-full items-center gap-1.5">
         <label htmlFor="show" className="text-lg">What are your favorite movies or television shows?</label>
-        <input id="show" name="show" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <input id="show" name="show" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" required />
       </div>
 
       <div className="grid w-full items-center gap-1.5">
         <label htmlFor="favoriteApp" className="text-lg">What’s your favorite video game or app?</label>
-        <input id="favoriteApp" name="favoriteApp" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <input id="favoriteApp" name="favoriteApp" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" required />
       </div>
 
       <div className="grid w-full items-center gap-1.5">
         <label htmlFor="dinnerGuest" className="text-lg">If you could have dinner with any famous figure (living or dead), who would it be, and why?</label>
-        <input id="dinnerGuest" name="dinnerGuest" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <input id="dinnerGuest" name="dinnerGuest" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" required />
       </div>
 
       <div className="grid w-full items-center gap-1.5">
         <label htmlFor="instantSkill" className="text-lg">If you could master any skill instantly, what would it be?</label>
-        <input id="instantSkill" name="instantSkill" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <input id="instantSkill" name="instantSkill" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" required />
       </div>
 
       <div className="grid w-full items-center gap-1.5">
         <label htmlFor="travelDestination" className="text-lg">If you could go anywhere in the world, where would you like to go? 🐻</label>
-        <input id="travelDestination" name="travelDestination" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" />
+        <input id="travelDestination" name="travelDestination" className="border-gray-300 border-3 rounded rounded-lg py-2 px-3 text-lg" type="text" required />
       </div>
 
       <button type="submit" className="mt-5 mb-10 px-5 py-2 bg-black text-white rounded cursor-pointer text-lg">

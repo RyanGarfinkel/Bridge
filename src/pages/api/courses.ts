@@ -47,17 +47,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const courses = await Course.find({ auth0Id: auth0Id });
 
-    console.log('Courses (api):', courses);
-
     if(courses && courses.length > 0)
         return res.status(200).json(courses as ICourse[]);
 
     const surveyResponses = JSON.stringify(survey);
 
     const limit = pLimit(1);
-
-     console.log('Creating courses for user:', auth0Id);
-     console.log('prompts:', prompts);
 
     await Promise.all(
         prompts.map((prompt, i) =>

@@ -16,7 +16,7 @@ const createLesson = async (title: string, surveyResponses: string) => {
             responseMimeType: 'application/json',
             responseSchema: {
                 type: Type.STRING,
-                description: 'Provide as normal text.',
+                description: 'Provide as plaintext with no extra symbols or formatting. The content should be detailed and should teach the student about the topic, prioritizing readability and simplicity. 500-600 words for the content.',
             },
         }
     });
@@ -26,7 +26,7 @@ const createLesson = async (title: string, surveyResponses: string) => {
     const questions = await createQuestions(content);
 
     const lesson: ILesson = {
-        title: title,
+        title: title.split('-')[0],
         isCompleted: false,
         content: content,
         questions: questions.map((question: IQuestion) => ({

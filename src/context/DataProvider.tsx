@@ -92,12 +92,7 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     const fetchCourses = async () => {
 
         if(!auth0User || !auth0User.sub)
-        {
-            console.log('No auth0 user found. Cannot fetch courses.');
             return;
-        }
-
-        console.log('Fetching courses for user:', auth0User.sub);
 
         setIsFetchingCourses(true);
         const res = await fetch('/api/courses', {

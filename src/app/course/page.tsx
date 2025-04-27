@@ -84,10 +84,10 @@ export default function StudyAndQuizPage() {
         >
           {/* Part 1: Notes and Lectures */}
           <h1 style={{ fontSize: '2.5rem', marginBottom: '20px' }}></h1>
-          <p style={{ fontSize: '1.25rem', lineHeight: '1.8', maxWidth: '600px' }}>
+          <p style={{ fontSize: '1.25rem', lineHeight: '1.8', maxWidth: '600px', marginBottom: '20px' }}>
             Welcome to the study section! On the next page there will be a short multiple-choice quiz.
           </p>
-          <h2 style={{ fontSize: '2rem', marginBottom: '10px' }}>
+          <h2 style={{ fontSize: '2rem', marginBottom: '20px' }}>
             Course: {course?.title || 'Unknown Course'}
             <br />
             Lesson: {lesson?.title || 'Unknown Lesson'}
@@ -105,15 +105,20 @@ export default function StudyAndQuizPage() {
           >
             {lesson?.content ? (
               <div className=''>
-                <h3 style={{ fontSize: '1.5rem', marginBottom: '10px' }}>Lesson Content:</h3>
-                <div className="max-w-6xl mx-auto overflow-y-auto max-h-[70vh] p-4 box-border">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {lesson?.content ? toMarkdown(lesson.content) : ''}
-                  </ReactMarkdown>
-                </div>
+            <h3 style={{ fontSize: '1.5rem', marginBottom: '10px' }}>Lesson Content:</h3>
+            <div className="max-w-6xl mx-auto overflow-y-auto max-h-[70vh] p-4 box-border">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  p: ({ node, ...props }) => <p style={{ marginBottom: '20px' }} {...props} />,
+                }}
+              >
+                {lesson?.content ? toMarkdown(lesson.content) : ''}
+              </ReactMarkdown>
+            </div>
               </div>
             ) : (
-              <p style={{ fontSize: '1.25rem', lineHeight: '1.8' }}>No content available for this lesson.</p>
+              <p style={{ fontSize: '1.25rem', lineHeight: '1.8', marginBottom: '20px' }}>No content available for this lesson.</p>
             )}
           </div>
           <button
@@ -132,9 +137,9 @@ export default function StudyAndQuizPage() {
             Next →
           </button>
         </div>
-      )}
+          )}
 
-      {currentPart === 2 && (
+          {currentPart === 2 && (
         <div
           style={{
             display: 'flex',

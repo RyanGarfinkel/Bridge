@@ -49,12 +49,12 @@ export default function CourseDescription() {
       {/* Back Button */}
       <div
       style={{
-        alignSelf: 'flex-start',
-        marginBottom: '5px', // Add spacing below the button
+      alignSelf: 'flex-start',
+      marginBottom: '5px', // Add spacing below the button
       }}
       >
       <Button variant="outline" onClick={() => router.push('/dashboard')}>
-        Back to Dashboard
+      Back to Dashboard
       </Button>
       </div>
 
@@ -67,36 +67,38 @@ export default function CourseDescription() {
       <div style={{ textAlign: 'left', width: '100%' }}>
       <h2 style={{ fontSize: '2rem', marginBottom: '10px' }}>Curriculum:</h2>
       {course && course.lessons && course.lessons.length > 0 ? (
-        course.lessons.map((lesson, index) => (
+      <ol>
+        {course.lessons.map((lesson, index) => (
         <li key={index}>
           {lesson.title}{' '}
           {!lesson.isCompleted ? (
-            <span style={{ color: 'orange', marginLeft: '10px' }}>⚠️</span>
+          <span style={{ color: 'orange', marginLeft: '10px' }}>⚠️</span>
           ) : (
-            <span style={{ color: 'green', marginLeft: '10px' }}>✔️</span>
+          <span style={{ color: 'green', marginLeft: '10px' }}>✔️</span>
           )}
         </li>
-        ))
+        ))}
+      </ol>
       ) : (
-        <li>No lessons available</li>
+      <li>No lessons available</li>
       )}
       </div>
 
       {course && course.lessons && course.lessons.length > 0 && (
       <Button
-        variant="outline"
-        onClick={() => {
-        const nextLesson = course.lessons.find((lesson) => !lesson.isCompleted);
-        if (nextLesson) {
-          router.push(
-          `/course?unit=${course.title.toLowerCase().replaceAll(' ', '-')}&lesson=${nextLesson.title}`
-          );
-        } else {
-          console.log('All lessons are complete');
-        }
-        }}
+      variant="outline"
+      onClick={() => {
+      const nextLesson = course.lessons.find((lesson) => !lesson.isCompleted);
+      if (nextLesson) {
+        router.push(
+        `/course?unit=${course.title.toLowerCase().replaceAll(' ', '-')}&lesson=${nextLesson.title}`
+        );
+      } else {
+        console.log('All lessons are complete');
+      }
+      }}
       >
-        Start the next lesson
+      Start the next lesson
       </Button>
       )}
     </div>

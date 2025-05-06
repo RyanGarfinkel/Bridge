@@ -20,6 +20,12 @@ const LessonPage: React.FC<LessonPageProps> = ({ params }) => {
     const [lesson, setLesson] = useState<ILesson | null>(null);
     const [isViewingContent, setIsViewingContent] = useState(true);
 
+    const completeQuestions = async () => {
+
+        completeLesson(course?._id as string, lesson?.id as string)
+            .then(() => router.push(`/course/${course?._id}`));
+    };
+
     useEffect(() => {
 
         params.then(({ courseId, lessonId }) => {
@@ -43,16 +49,6 @@ const LessonPage: React.FC<LessonPageProps> = ({ params }) => {
         });
     }, [params, courses]);
 
-    const completeQuestions = async () => {
-
-        console.log('Completing questions...');
-        completeLesson(course?._id as string, lesson?.id as string)
-            .then(() => {
-                console.log('Questions completed successfully.');
-                router.push(`/course/${course?._id}`);
-            });
-    }
-
     return (
         <div className="relative w-full">
             { !course || !lesson ? (
@@ -62,7 +58,7 @@ const LessonPage: React.FC<LessonPageProps> = ({ params }) => {
             ) : (
                 <div className="flex flex-col items-center justify-center">
                     <button onClick={() => window.history.back()} className="absolute top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                        Return to Course
+                        🚪 Exit Lesson
                     </button>
                     {
                         isViewingContent ? (
@@ -71,7 +67,7 @@ const LessonPage: React.FC<LessonPageProps> = ({ params }) => {
                             <QuestionView questions={lesson.questions} completeQuestions={completeQuestions} />
                         )
                     }
-                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+                    <div className="bottom-4 left-1/2 transform -translate-x-1/2">
                         <button
                             onClick={() => setIsViewingContent(!isViewingContent)}
                             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"

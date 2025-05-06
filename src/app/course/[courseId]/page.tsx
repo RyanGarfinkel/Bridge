@@ -45,36 +45,34 @@ const CoursePage: React.FC<CoursePageProps> = ({ params }) => {
     }
 
     return (
-        <div className='flex justify-center items-center bg-gray-50 w-full p-10'>
-            <div className='font-sans text-gray-800 w-full'>
-                <h1 className='text-3xl font-bold mb-4'>
-                    {course.title}
-                </h1>
-                <p className='text-lg text-gray-600 mb-6'>
-                    {course.description}
-                </p>
-                <div className='grid grid-cols-3 gap-6 w-full'>
-                    {
-                        course.lessons?.map((lesson) => (
-                            <Card key={lesson.id} className='w-[500px]'>
-                                <CardHeader className='text-xl font-semibold'>
-                                    { lesson.title }
-                                </CardHeader>
-                                <CardDescription className='text-primary text-lg mx-2'>
-                                    { lesson.description }
-                                </CardDescription>
-                                <CardFooter className='flex flex-row justify-between items-center'>
-                                    <Button variant='default' className='bg-blue-500 hover:bg-blue-600 text-white' onClick={() => handleClick(lesson.id)}>
-                                        {lesson.isCompleted ? '🔄 Review Lesson' : '🚀 Start Lesson'}
-                                    </Button>
-                                    <span className={`text-lg ${lesson.isCompleted ? 'text-green-500' : 'text-red-500'}`}>
-                                        {lesson.isCompleted ? '✅ Completed' : '❌ Not Completed'}
-                                    </span>
-                                </CardFooter>
-                            </Card>
-                        ))
-                    }
-                </div>
+        <div className='flex flex-col justify-center items-center font-sans w-full'>
+            <h1 className='text-3xl font-bold mb-4'>
+                { course.title }
+            </h1>
+            <p className='text-lg text-gray-600 mb-6'>
+                { course.description }
+            </p>
+            <div className='grid grid-cols-3 gap-6 max-w-[1600px] w-full'>
+                {
+                    course.lessons?.map((lesson) => (
+                        <Card key={lesson.id} className='w-[500px]'>
+                            <CardHeader className='text-xl font-semibold'>
+                                { lesson.title }
+                            </CardHeader>
+                            <CardDescription className='text-primary text-lg mx-2'>
+                                { lesson.description }
+                            </CardDescription>
+                            <CardFooter className='flex flex-row justify-between items-center'>
+                                <Button className='bg-blue-500 hover:bg-blue-600 text-white' onClick={() => handleClick(lesson.id)}>
+                                    { lesson.isCompleted ? '🔄 Review Lesson' : '🚀 Start Lesson' }
+                                </Button>
+                                <span className={`text-lg ${lesson.isCompleted ? 'text-green-500' : 'text-red-500'}`}>
+                                    { lesson.isCompleted ? '✅ Completed' : '❌ Not Completed' }
+                                </span>
+                            </CardFooter>
+                        </Card>
+                    ))
+                }
             </div>
         </div>
     );

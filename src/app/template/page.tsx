@@ -1,14 +1,14 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { useData } from '@/context/DataProvider';
+import { useCourse } from '@/context/CourseProvider';
 import { ICourse } from '@/models/Course';
 import { useRouter } from 'next/navigation'; // Correct import for client components
 import { useEffect, useState } from 'react';
 
 export default function CourseDescription() {
   const router = useRouter();
-  const {courses} = useData();
+  const {courses} = useCourse();
   const [course, setCourse] = useState<ICourse>();
 
   useEffect(() => {

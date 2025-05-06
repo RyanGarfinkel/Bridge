@@ -1,11 +1,11 @@
 'use client';
 
 import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { AppSidebar } from '@/components/app-sidebar'
 import { useUser } from '@auth0/nextjs-auth0';
 import { DataProvider } from '@/context/DataProvider';
+import { CourseProvider } from '@/context/CourseProvider';
+import './globals.css';
+import Navbar from '@/components/Navbar';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -17,15 +17,15 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+interface RootLayoutProps {
   children: React.ReactNode;
-}>) {
+}
+
+const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
+
   const { user } = useUser();
 
   return (
-
     <html lang="en">
       <head>
         <title>Bridgly</title>
@@ -33,13 +33,18 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <DataProvider>
-          <SidebarProvider>
-            { user && <AppSidebar />}
-            { user && <SidebarTrigger />}
-            {children}
-          </SidebarProvider>
+          <CourseProvider>
+              <div className='flex flex-col'>
+                {
+                  user && <Navbar />
+                }
+                { children }
+              </div>
+          </CourseProvider>
         </DataProvider>
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

@@ -31,13 +31,13 @@ const Home = () => {
       <div className='flex gap-8'>
         <Link
           href='/auth/login'
-          className='text-3xl px-12 py-6 bg-gradient-to-r from-blue-500 to-blue-700 text-white shadow-lg hover:shadow-xl transition-transform transform hover:scale-105 focus:ring-4 focus:ring-blue-300 rounded-full inline-block text-center'
+          className='text-xl sm:text-3xl px-6 sm:px-12 py-4 sm:py-6 bg-gradient-to-r from-blue-500 to-blue-700 text-white shadow-lg hover:shadow-xl transition-transform transform hover:scale-105 focus:ring-4 focus:ring-blue-300 rounded-full inline-block text-center'
         >
           Log In
         </Link>
         <Link
           href='/auth/login'
-          className='text-3xl px-12 py-6 border-2 border-blue-600 text-blue-600 shadow-lg hover:bg-blue-50 hover:shadow-xl transition-transform transform hover:scale-105 focus:ring-4 focus:ring-blue-300 rounded-full inline-block text-center'
+          className='text-xl sm:text-3xl px-6 sm:px-12 py-4 sm:py-6 border-2 border-blue-600 text-blue-600 shadow-lg hover:bg-blue-50 hover:shadow-xl transition-transform transform hover:scale-105 focus:ring-4 focus:ring-blue-300 rounded-full inline-block text-center'
         >
           Sign Up
         </Link>

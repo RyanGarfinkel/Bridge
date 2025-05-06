@@ -1,6 +1,5 @@
 'use client';
 
-import { ICourse, ILesson } from '@/models/Course';
 import { IUser } from '@/models/User';
 import { useUser } from '@auth0/nextjs-auth0';
 import React, { useState, useEffect } from 'react';
@@ -8,12 +7,7 @@ import React, { useState, useEffect } from 'react';
 interface DataContextProps {
     isLoading: boolean;
     user: IUser | undefined;
-    courses: ICourse[];
-    isFetchingCourses: boolean;
     updateSurvey: (survey: object) => void;
-    completeLesson: (course: ICourse, lesson: ILesson) => void;
-    currentCourse: ICourse | undefined;
-    updateCurrentCourse: (course: ICourse) => void;
 }
 
 const DataContext = React.createContext<DataContextProps | undefined>(undefined);
@@ -24,8 +18,6 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
     const [isLoading, setIsLoading] = useState(false);
     const [user, setUser] = useState<IUser | undefined>(undefined);
-    const [courses, setCourses] = useState<ICourse[]>([]);
-    const [isFetchingCourses, setIsFetchingCourses] = useState(false);
     const updateSurvey = async (survey: object) => {
         const response = await fetch('/api/survey', {
             method: 'POST',
@@ -38,10 +30,12 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
             }),
         });
 
-        if(response.ok)
-            fetchCourses();
-        else
-            throw new Error('Failed to update survey');
+        if(!response.ok)
+        {
+            const error = await response.json();
+            console.error('Error updating survey:', error);
+        }
+        
     }; 
 
     useEffect(() => {
@@ -50,8 +44,6 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         {
         
             setUser(undefined);
-            setCourses([]);
-
             setIsLoading(false);
             return;
         }
@@ -76,11 +68,6 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
             {
                 const user = await res.json();
                 setUser(user);
-
-                if(user.hasCompletedSurvey)
-                    fetchCourses();
-                else
-                    setCourses([]);
             }
             else
                 throw new Error('Failed to fetch user');
@@ -92,70 +79,8 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         
     }, [auth0User]);
 
-    const fetchCourses = async () => {
-
-        if(!auth0User || !auth0User.sub)
-            return;
-
-        setIsFetchingCourses(true);
-        const res = await fetch('/api/courses', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                auth0Id: auth0User?.sub,
-            }),
-        });
-
-        setIsFetchingCourses(false);
-
-        if(res.ok)
-        {
-            const courses = await res.json();
-            setCourses(courses);
-        }
-        else
-            throw new Error('Failed to fetch courses');
-    }
-
-    const completeLesson = async (course: ICourse, lesson: ILesson) => {
-
-        const updatedLessons = course.lessons.map((l) =>
-            l.title === lesson.title ? { ...l, isCompleted: true } : l
-        );
-
-        const isCourseCompleted = updatedLessons.every((l) => l.isCompleted);
-
-        const res = await fetch('/api/updateCourse', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                course: {
-                    ...course,
-                    lessons: updatedLessons,
-                    isCompleted: isCourseCompleted,
-                },
-            }),
-        });
-
-        if (res.ok) {
-            const updatedCourse = await res.json();
-            setCourses(courses.map((c) => c._id === updatedCourse._id ? updatedCourse : c));
-        } else {
-            throw new Error('Failed to update course');
-        }
-    };
-
-    const [currentCourse, setCurrentCourse] = useState<ICourse | undefined>(undefined);
-    const updateCurrentCourse = (course: ICourse) => {
-        setCurrentCourse(course);
-    };
-
     return (
-        <DataContext.Provider value={{ user, courses, isLoading, updateSurvey, isFetchingCourses, completeLesson, currentCourse, updateCurrentCourse }}>
+        <DataContext.Provider value={{ user, isLoading, updateSurvey }}>
             {children}
         </DataContext.Provider>
     )

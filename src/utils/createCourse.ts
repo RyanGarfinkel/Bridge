@@ -1,103 +1,83 @@
-import Course, { ILesson, IQuestion } from '@/models/Course';
+import Course, { IAnswer, ILesson, IQuestion } from '@/models/Course';
 import { GoogleGenAI } from '@google/genai';
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GOOGLE_GENAI_API_KEY,
 });
 
-const createLesson = async (title: string, surveyResponses: string): Promise<ILesson> => {
-    const prompt = `Write a detailed and engaging lesson on the topic "${title}". Use the following survey responses to make the lesson more personalized: ${surveyResponses}. The lesson should be clear, easy to understand, and around 500-600 words. Do not include any titles or headings—just provide the lesson content as plain text.`;
-
-    const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash',
-        contents: prompt,
-        config: {
-            responseMimeType: 'text/plain',
-        },
-    });
-
-    const content = (response.text || '').replace(/\\n/g, ' ').trim();
-
-    const questions = await createQuestions(content);
-
-    return {
-        title: title.split('-')[0],
-        isCompleted: false,
-        content: content,
-        questions,
-    };
-};
-
-const createQuestions = async (content: string): Promise<IQuestion[]> => {
-    const prompt = `Based on the following lesson content: "${content}", generate 4 multiple-choice questions. Each question should have 4 possible answers, with one correct answer. Provide the questions and answers as plain text, formatted like this:
-    
-    Question 1: [Your question here]
-    a) [Answer 1]
-    b) [Answer 2]
-    c) [Answer 3]
-    d) [Answer 4]
-    Correct Answer: [Correct answer letter]`;
-
-    console.log('Generating questions...');
-    const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash',
-        contents: prompt,
-        config: {
-            responseMimeType: 'text/plain',
-        },
-    });
-
-    const questionsText = (response.text || '').replace(/\\n/g, ' ').trim();
-    console.log('Finished generating questions.');
-
-    return parseQuestions(questionsText);
-};
-
-const parseQuestions = (questionsText: string): IQuestion[] => {
-    const questions: IQuestion[] = [];
-    const questionBlocks = questionsText.split('Question ').slice(1);
-
-    for (const block of questionBlocks) {
-        const lines = block.split('\n').map((line) => line.trim());
-        const questionLine = lines[0];
-        const answers = lines.slice(1, 5).map((line) => ({
-            text: line.slice(3).trim(),
-            isCorrect: false,
-        }));
-        const correctAnswerLine = lines[5];
-        const correctAnswerLetter = correctAnswerLine.split(':')[1].trim();
-
-        const correctIndex = correctAnswerLetter.charCodeAt(0) - 'a'.charCodeAt(0);
-        if (answers[correctIndex]) {
-            answers[correctIndex].isCorrect = true;
-        }
-
-        questions.push({
-            question: questionLine,
-            answers,
-        });
-    }
-
-    return questions;
+const removeInvalidControlChars = (text: string) => {
+    return text.replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
+               .replace(/\\(?!["\\/bfnrtu])/g, '')
+               .replace(/[\u2028\u2029]/g, '');
 };
 
 const createCourse = async (title: string, lessons: string[], surveyResponses: string, auth0Id: string) => {
-    console.log('Starting course creation...');
-    const lessonsGenerated: ILesson[] = [];
 
-    for (const lessonTitle of lessons) {
-        const lesson = await createLesson(lessonTitle, surveyResponses);
-        lessonsGenerated.push(lesson);
-    }
+    console.log('About to create course:', title);
+    const prompt = `Create an engaging and personalized course. The topic is "${title}". Include the following lessons: ${lessons.join(', ')}. Use the survey responses: "${surveyResponses}" to personalize the content. For each lesson:
+        Generate 4-5 questions.
+        Make sure there is one answer for each question that is correct.
+        Format the output as JSON like this:
+        {
+            "courseDescription": "[Brief course description]",
+            "lessons": [
+                {
+                    "title": "[Apealing lesson title, may incliude emoji]",
+                    "description": "[Brief lesson description (1 sentence)]",
+                    "content": "[Lesson content (500-600 words). Include emojies to make more engaging. Use markdown syntax. Include code snippets and links if necessary. Use headings (ex. ## or ###). Escape special characters to ensure valid JSON.]",
+                    "questions": [
+                        {
+                            "question": "[Question text]",
+                            "answers": [
+                                { "text": "[Answer 1]", "isCorrect": true/false },
+                                { "text": "[Answer 2]", "isCorrect": true/false },
+                                { "text": "[Answer 3]", "isCorrect": true/false },
+                                { "text": "[Answer 4]", "isCorrect": true/false }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }`;
+
+    const response = await ai.models.generateContent({
+        model: 'gemini-2.0-flash',
+        contents: prompt,
+        config: {
+            responseMimeType: 'application/json',
+        },
+    });
+
+    const data = JSON.parse(removeInvalidControlChars(response.text || '{}'));
+
+    if (!data.lessons || !Array.isArray(data.lessons))
+        throw new Error('Invalid response from AI');
+
+    const lessonsGenerated: ILesson[] = data.lessons.map((lesson: ILesson, i: number) => ({
+        id: `${i + 1}`,
+        title: lesson.title,
+        description: lesson.description,
+        isCompleted: false,
+        content: lesson.content,
+        questions: lesson.questions.map((question: IQuestion) => ({
+            question: question.question,
+            answers: question.answers.map((answer: IAnswer) => ({
+                text: answer.text,
+                isCorrect: answer.isCorrect,
+            })),
+        })),
+    }));
 
     const course = await Course.create({
         title: title,
-        isCompleted: false,
+        description: data.courseDescription,
+        status: 'Not Started',
         auth0Id: auth0Id,
         lessons: lessonsGenerated,
     });
 
-    console.log('Course created successfully:', course.title);
+    console.log('Course created:', course.title);
+
     return course;
 };
 

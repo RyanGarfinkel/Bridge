@@ -4,31 +4,6 @@ import Course, { ICourse } from '@/models/Course';
 import Survey from '@/models/Survey';
 import prompts, { unitTitles } from '@/utils/prompts';
 import createCourse from '@/utils/createCourse';
-import pLimit from 'p-limit';
-
-const retryWithBackoff = async <T>(
-    fn: () => Promise<T>,
-    retries = 5, // Increase retries
-    delay = 2000 // Start with a 2-second delay
-): Promise<T | undefined> => {
-    while (retries > 0) {
-        try {
-            return await fn();
-        } catch (error: unknown) {
-            if (error instanceof Error && error.message.includes('429')) {
-                console.warn(`Rate limit exceeded. Retrying in ${delay / 1000}s...`);
-                await new Promise((resolve) => setTimeout(resolve, delay));
-                retries--;
-                delay *= 2; // Exponential backoff
-            } else {
-                console.error('Non-retryable error:', error);
-                throw error; // Throw non-rate-limit errors immediately
-            }
-        }
-    }
-    console.error('Failed after multiple retries.');
-    throw new Error('Failed after multiple retries.');
-};
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
@@ -52,15 +27,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const surveyResponses = JSON.stringify(survey);
 
-    const limit = pLimit(1);
-
-    await Promise.all(
-        prompts.map((prompt, i) =>
-            limit(() =>
-                retryWithBackoff(() => createCourse(unitTitles[i], prompt, surveyResponses, auth0Id))
-            )
-        )
-    );
+    prompts.forEach((prompt, i) => {
+        createCourse(unitTitles[i], prompt, surveyResponses, auth0Id)
+    });
 
     return res.status(200).json(courses as ICourse[]);
 };
